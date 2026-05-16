@@ -33,9 +33,35 @@ class CausalSelfAttention(nn.Module):
     return proj
 
   def attention(self, key, query, value, attention_mask):
+    # key, query, value: [bs, num_heads, seq_len, head_size]
+    d_k = self.attention_head_size
+    seq_len = query.size(-2)
 
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # Scaled dot-product attention scores: [bs, num_heads, seq_len, seq_len]
+    scores = torch.matmul(query, key.transpose(-2, -1)) / (d_k ** 0.5)
+
+    # Causal mask: 미래 토큰을 보지 못하도록 상삼각 부분을 -10000으로 마스킹
+    # shape: [1, 1, seq_len, seq_len]
+    causal_mask = torch.tril(torch.ones(seq_len, seq_len, device=query.device, dtype=query.dtype))
+    causal_mask = (1.0 - causal_mask) * -10000.0
+    scores = scores + causal_mask
+
+    # attention_mask: [bs, 1, 1, seq_len] — padding 위치는 큰 음수 → softmax 후 ≈ 0
+    scores = scores + attention_mask
+
+    # Softmax로 attention weight 계산
+    attn_weights = torch.softmax(scores, dim=-1)
+
+    # 원래 Transformer 구현 방식에 따라 attention weight에 dropout 적용
+    attn_weights = self.dropout(attn_weights)
+
+    # Value와 가중합: [bs, num_heads, seq_len, head_size]
+    context = torch.matmul(attn_weights, value)
+
+    # 멀티헤드 병합: [bs, seq_len, all_head_size]
+    context = rearrange(context, 'b h t d -> b t (h d)')
+
+    return context
 
 
   def forward(self, hidden_states, attention_mask):

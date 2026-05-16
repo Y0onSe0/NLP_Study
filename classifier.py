@@ -53,23 +53,21 @@ class GPT2SentimentClassifier(torch.nn.Module):
       elif config.fine_tune_mode == 'full-model':
         param.requires_grad = True
 
-    '''
-    TODO: BERT 임베딩의 감정 분류를 위해 필요한 인스턴스 변수를 생성하시오.
-    '''
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # GPT-2 마지막 토큰 representation → 분류 헤드
+    self.dropout = torch.nn.Dropout(config.hidden_dropout_prob)
+    self.classifier = torch.nn.Linear(config.hidden_size, self.num_labels)
 
 
   def forward(self, input_ids, attention_mask):
     '''문장들의 batch를 받아서 감정 클래스에 대한 로짓을 반환'''
 
-    '''
-    TODO: 최종 GPT contextualized embedding은 마지막 토큰의 hidden state이다.
-        힌트: 현재 훈련 반복루프에서 손실 함수로 `F.cross_entropy`를 사용하고 있음을 고려하여
-        적절한 반환값이 무엇인지 생각해보시오.
-    '''
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # GPT-2로 인코딩 후 마지막 토큰의 hidden state 추출
+    gpt_output = self.gpt(input_ids, attention_mask)
+    last_token = gpt_output['last_token']       # [bs, hidden_size]
+
+    # dropout → linear → logits [bs, num_labels]
+    logits = self.classifier(self.dropout(last_token))
+    return logits
 
 
 class SentimentDataset(Dataset):
