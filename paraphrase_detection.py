@@ -59,18 +59,22 @@ class ParaphraseGPT(nn.Module):
 
   def forward(self, input_ids, attention_mask):
     """
-    TODO: paraphrase_detection_head Linear layer를 사용하여 토큰의 레이블을 예측하시오.
-
-    입력은 다음과 같은 구조를 갖는다:
-
-      'Is "{s1}" a paraphrase of "{s2}"? Answer "yes" or "no": '
-
-    따라서, 문장의 끝에서 다음 토큰에 대한 예측을 해야 할 것이다. 
-    훈련이 잘 되었다면, 패러프레이즈인 경우에는 토큰 "yes"(BPE index 8505)가, 
-    패러프레이즈가 아닌 경우에는 토큰 "no" (BPE index 3919)가 될 것이다.
+    GPT-2의 마지막 non-padding 토큰 hidden state로부터 vocab logit을 계산하고,
+    "yes"(8505)와 "no"(3919) 토큰의 logit만 추출하여 [batch_size, 2] 형태로 반환합니다.
     """
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    gpt_outputs = self.gpt(input_ids, attention_mask)
+    last_token_hidden = gpt_outputs['last_token']  # [batch_size, hidden_size]
+
+    # hidden state -> vocab logits
+    vocab_logits = self.gpt.hidden_state_to_token(last_token_hidden)  # [batch_size, vocab_size]
+
+    # yes (8505) / no (3919) logit 추출
+    no_logits = vocab_logits[:, 3919]
+    yes_logits = vocab_logits[:, 8505]
+
+    # [batch_size, 2] 크기로 결합
+    logits = torch.stack([no_logits, yes_logits], dim=1)
+    return logits
 
 
 
