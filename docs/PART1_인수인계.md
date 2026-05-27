@@ -84,24 +84,41 @@ return self.classifier(self.dropout(last_token))
 
 ## 3. 실험 결과
 
-### 3.1 last-linear-layer 모드 (GPT-2 가중치 고정)
+### 3.1 최종 결과 요약
 
-| 데이터셋 | Dev Accuracy | 목표 | 상태 |
-|----------|-------------|------|------|
-| SST | 0.453 | 0.462 | 🟡 근접 |
-| CFIMDB | 0.878 | 0.861 | ✅ 초과 달성 |
+| 모드 | 데이터셋 | Dev Accuracy | 목표 | 상태 |
+|------|---------|-------------|------|------|
+| last-linear-layer | SST | 0.453 | 0.462 | 🟡 근접 |
+| last-linear-layer | CFIMDB | 0.878 | 0.861 | ✅ 초과 달성 |
+| full-model | SST | **0.5177** | 0.513 | ✅ 초과 달성 |
+| full-model | CFIMDB | **0.9796** | 0.976 | ✅ 초과 달성 |
+
+### 3.2 last-linear-layer 모드 (GPT-2 가중치 고정)
+
+GPT-2 파라미터는 전부 freeze하고 마지막 linear 분류 레이어만 학습.
+
+| 에포크별 best | SST dev acc | CFIMDB dev acc |
+|-------------|-------------|----------------|
+| Best | 0.453 | 0.878 |
 
 실행 명령어:
 ```bash
 python classifier.py --fine-tune-mode last-linear-layer --use_gpu
 ```
 
-### 3.2 full-model 모드 (GPT-2 전체 fine-tuning)
+### 3.3 full-model 모드 (GPT-2 전체 fine-tuning)
 
-| 데이터셋 | Dev Accuracy | 목표 |
-|----------|-------------|------|
-| SST | - | 0.513 |
-| CFIMDB | - | 0.976 |
+GPT-2 전체 파라미터를 함께 학습. **반드시 `--lr 1e-5` 사용.**
+
+| 에포크 | SST train acc | SST dev acc | CFIMDB train acc | CFIMDB dev acc |
+|--------|-------------|------------|-----------------|----------------|
+| 0 | - | - | 0.947 | 0.906 |
+| 1 | 0.553 | 0.487 | 0.987 | 0.971 |
+| 3 | 0.647 | 0.512 | 0.996 | 0.955 |
+| 5 | 0.734 | 0.493 | 0.998 | 0.976 |
+| 7 | 0.861 | **0.518** | 0.997 | 0.967 |
+| 9 | 0.910 | 0.500 | 0.999 | **0.980** |
+| **Best** | - | **0.518** | - | **0.980** |
 
 > ⚠️ **주의**: `--lr 1e-5` 사용 필수!  
 > 기본값 `lr=1e-3`은 full-model에 너무 커서 사전학습 가중치가 손상됨 (catastrophic forgetting).  
@@ -135,6 +152,15 @@ h.{0...11}.attn.bias | UNEXPECTED
 이 경고는 무시해도 됨. GPT-2의 causal mask bias가 우리 구현과 아키텍처가 달라서 생기는 것으로,  
 실제 동작에는 영향 없음 (`sanity_check.py` 통과로 확인됨).
 
+### 4.3 Colab 작업 디렉토리 설정
+
+Colab 실행 시 반드시 작업 디렉토리를 프로젝트 폴더로 변경해야 함:
+
+```python
+import os
+os.chdir('/content/NLP_Study')
+```
+
 ---
 
 ## 5. 실행 환경
@@ -152,3 +178,16 @@ h.{0...11}.attn.bias | UNEXPECTED
 python prepare_submit.py
 ```
 → `nlp2026-final-outputs.zip` 생성 → 이클래스 "지정주제 프로젝트(기준모델)" 제출
+
+### 생성되는 prediction 파일 목록
+
+| 파일명 | 설명 |
+|--------|------|
+| `predictions/last-linear-layer-sst-dev-out.csv` | SST dev 예측 (last-linear-layer) |
+| `predictions/last-linear-layer-sst-test-out.csv` | SST test 예측 (last-linear-layer) |
+| `predictions/last-linear-layer-cfimdb-dev-out.csv` | CFIMDB dev 예측 (last-linear-layer) |
+| `predictions/last-linear-layer-cfimdb-test-out.csv` | CFIMDB test 예측 (last-linear-layer) |
+| `predictions/full-model-sst-dev-out.csv` | SST dev 예측 (full-model) |
+| `predictions/full-model-sst-test-out.csv` | SST test 예측 (full-model) |
+| `predictions/full-model-cfimdb-dev-out.csv` | CFIMDB dev 예측 (full-model) |
+| `predictions/full-model-cfimdb-test-out.csv` | CFIMDB test 예측 (full-model) |
