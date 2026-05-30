@@ -90,7 +90,8 @@ class GPT2Model(GPTPreTrainedModel):
 
     # 마지막 토큰의 hidden state 구하기.
     last_non_pad_idx = attention_mask.sum(dim=1) - 1  # 마지막 인덱스를 구하려면 1을 뺀다.
-    last_token = sequence_output[torch.arange(sequence_output.shape[0]), last_non_pad_idx]
+    batch_idx = torch.arange(sequence_output.shape[0], device=sequence_output.device)
+    last_token = sequence_output[batch_idx, last_non_pad_idx]
 
     return {'last_hidden_state': sequence_output, 'last_token': last_token}
 

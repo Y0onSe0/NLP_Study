@@ -15,6 +15,40 @@ from torch.utils.data import Dataset
 from transformers import GPT2Tokenizer
 
 
+PARAPHRASE_PROMPT_TEMPLATES = {
+  'baseline': 'Question 1: "{q1}"\nQuestion 2: "{q2}"\nAre these questions asking the same thing? Answer "yes" or "no": ',
+  'direct': 'Is "{q2}" a paraphrase of "{q1}"? Answer "yes" or "no": ',
+  'meaning': 'Do the following two questions have the same meaning?\nQuestion 1: "{q1}"\nQuestion 2: "{q2}"\nAnswer: ',
+}
+
+
+def get_paraphrase_prompt_template(args):
+  template_name = getattr(args, 'prompt_template', 'baseline')
+  if template_name not in PARAPHRASE_PROMPT_TEMPLATES:
+    raise ValueError(f"Unknown prompt_template '{template_name}'. Choose one of: {sorted(PARAPHRASE_PROMPT_TEMPLATES)}")
+  return template_name
+
+
+def build_paraphrase_prompts(sent1, sent2, template_name='baseline'):
+  if template_name not in PARAPHRASE_PROMPT_TEMPLATES:
+    raise ValueError(f"Unknown prompt_template '{template_name}'. Choose one of: {sorted(PARAPHRASE_PROMPT_TEMPLATES)}")
+  template = PARAPHRASE_PROMPT_TEMPLATES[template_name]
+  return [template.format(q1=s1, q2=s2) for s1, s2 in zip(sent1, sent2)]
+
+
+def encode_paraphrase_pairs(tokenizer, sent1, sent2, template_name='baseline', max_length=None):
+  cloze_style_sents = build_paraphrase_prompts(sent1, sent2, template_name)
+  tokenizer_kwargs = {
+    'return_tensors': 'pt',
+    'padding': True,
+    'truncation': True,
+  }
+  if max_length is not None and max_length > 0:
+    tokenizer_kwargs['max_length'] = max_length
+  encoding = tokenizer(cloze_style_sents, **tokenizer_kwargs)
+  return torch.LongTensor(encoding['input_ids']), torch.LongTensor(encoding['attention_mask'])
+
+
 def preprocess_string(s):
   return ' '.join(s.lower()
                   .replace('.', ' .')
@@ -43,18 +77,18 @@ class ParaphraseDetectionDataset(Dataset):
     labels = torch.LongTensor([x[2] for x in all_data])
     sent_ids = [x[3] for x in all_data]
 
-    cloze_style_sents = [f'Question 1: "{s1}"\nQuestion 2: "{s2}"\nAre these questions asking the same thing? Answer "yes" or "no": ' for
-                         (s1, s2) in zip(sent1, sent2)]
-    encoding = self.tokenizer(cloze_style_sents, return_tensors='pt', padding=True, truncation=True)
-
-    token_ids = torch.LongTensor(encoding['input_ids'])
-    attention_mask = torch.LongTensor(encoding['attention_mask'])
+    template_name = get_paraphrase_prompt_template(self.p)
+    token_ids, attention_mask = encode_paraphrase_pairs(
+      self.tokenizer, sent1, sent2, template_name, getattr(self.p, 'max_length', None)
+    )
 
     batched_data = {
       'token_ids': token_ids,
       'attention_mask': attention_mask,
       'labels': labels,
-      'sent_ids': sent_ids
+      'sent_ids': sent_ids,
+      'sent1': sent1,
+      'sent2': sent2,
     }
 
     return batched_data
@@ -78,18 +112,17 @@ class ParaphraseDetectionTestDataset(Dataset):
     sent2 = [x[1] for x in all_data]
     sent_ids = [x[2] for x in all_data]
 
-    cloze_style_sents = [f'Is "{s1}" a paraphrase of "{s2}"? Answer "yes" or "no": ' for (s1, s2) in
-                         zip(sent1, sent2)]
-
-    encoding = self.tokenizer(cloze_style_sents, return_tensors='pt', padding=True, truncation=True)
-
-    token_ids = torch.LongTensor(encoding['input_ids'])
-    attention_mask = torch.LongTensor(encoding['attention_mask'])
+    template_name = get_paraphrase_prompt_template(self.p)
+    token_ids, attention_mask = encode_paraphrase_pairs(
+      self.tokenizer, sent1, sent2, template_name, getattr(self.p, 'max_length', None)
+    )
 
     batched_data = {
       'token_ids': token_ids,
       'attention_mask': attention_mask,
-      'sent_ids': sent_ids
+      'sent_ids': sent_ids,
+      'sent1': sent1,
+      'sent2': sent2,
     }
 
     return batched_data
