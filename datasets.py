@@ -16,9 +16,11 @@ from transformers import GPT2Tokenizer
 
 
 PARAPHRASE_PROMPT_TEMPLATES = {
-  'baseline': 'Question 1: "{q1}"\nQuestion 2: "{q2}"\nAre these questions asking the same thing? Answer "yes" or "no": ',
-  'direct': 'Is "{q2}" a paraphrase of "{q1}"? Answer "yes" or "no": ',
-  'meaning': 'Do the following two questions have the same meaning?\nQuestion 1: "{q1}"\nQuestion 2: "{q2}"\nAnswer: ',
+  # Prompts intentionally end with one trailing space, so the next-token
+  # verbalizer is the unspaced GPT-2 token for "yes" or "no".
+  'baseline': 'Question 1: "{q1}"\nQuestion 2: "{q2}"\nAre these questions asking the same thing? Answer yes or no: ',
+  'direct': 'Is "{q2}" a paraphrase of "{q1}"? Answer yes or no: ',
+  'meaning': 'Do the following two questions have the same meaning?\nQuestion 1: "{q1}"\nQuestion 2: "{q2}"\nAnswer yes or no: ',
 }
 
 

@@ -94,8 +94,13 @@ def verify_yes_no_tokens(args):
 
   args.yes_token_id = yes_ids[0]
   args.no_token_id = no_ids[0]
-  print(f'yes/no token ids: yes={args.yes_token_id}, no={args.no_token_id}; '
-        f'spaced variants: yes={spaced_yes_ids}, no={spaced_no_ids}')
+  print('Verbalizer token check:')
+  print(f'  tokenizer.encode("yes") = {yes_ids}')
+  print(f'  tokenizer.encode("no") = {no_ids}')
+  print(f'  tokenizer.encode(" yes") = {spaced_yes_ids}')
+  print(f'  tokenizer.encode(" no") = {spaced_no_ids}')
+  print('  Selected verbalizer: trailing-space prompt + unspaced yes/no tokens '
+        f'(yes={args.yes_token_id}, no={args.no_token_id})')
   return args
 
 
@@ -111,6 +116,8 @@ def ensure_output_dirs(args):
   for output_path in [args.para_dev_out, args.para_test_out]:
     if output_path:
       os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+  if getattr(args, 'error_analysis_out', None):
+    os.makedirs(os.path.dirname(args.error_analysis_out) or '.', exist_ok=True)
 
 
 def save_model(model, optimizer, args, filepath, extra_info=None):
@@ -141,6 +148,56 @@ def write_paraphrase_predictions(output_path, sent_ids, predictions):
     f.write(f"id \t Predicted_Is_Paraphrase \n")
     for sent_id, pred in zip(sent_ids, predictions):
       f.write(f"{sent_id}, {int(pred)} \n")
+
+
+def token_overlap(sentence1, sentence2):
+  tokens1 = set(sentence1.split())
+  tokens2 = set(sentence2.split())
+  if not tokens1 and not tokens2:
+    return 0.0
+  return len(tokens1 & tokens2) / max(1, len(tokens1 | tokens2))
+
+
+def has_number_or_condition_difference(sentence1, sentence2):
+  if any(ch.isdigit() for ch in sentence1 + sentence2):
+    return True
+  condition_terms = [' if ', ' when ', ' before ', ' after ', ' without ', ' with ', ' except ', ' unless ']
+  padded1 = f' {sentence1} '
+  padded2 = f' {sentence2} '
+  return any((term in padded1) != (term in padded2) for term in condition_terms)
+
+
+def has_entity_signal(sentence1, sentence2):
+  entity_terms = [
+    ' india ', ' china ', ' america ', ' usa ', ' uk ', ' trump ', ' hillary ', ' modi ',
+    ' google ', ' facebook ', ' quora ', ' iphone ', ' android ', ' windows ', ' linux ',
+  ]
+  padded1 = f' {sentence1} '
+  padded2 = f' {sentence2} '
+  return any((term in padded1) != (term in padded2) for term in entity_terms)
+
+
+def classify_error_type(sentence1, sentence2, gold, pred):
+  if has_number_or_condition_difference(sentence1, sentence2):
+    return 'number_or_condition'
+  if has_entity_signal(sentence1, sentence2):
+    return 'entity_or_name'
+
+  overlap = token_overlap(sentence1, sentence2)
+  if gold == 0 and pred == 1 and overlap >= 0.45:
+    return 'similar_words_different_meaning'
+  if gold == 1 and pred == 0 and overlap <= 0.25:
+    return 'different_expression_same_meaning'
+  return 'needs_manual_review'
+
+
+def write_error_analysis(output_path, rows):
+  os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+  fieldnames = ['id', 'sentence1', 'sentence2', 'gold', 'pred', 'yes_prob', 'error_type', 'notes']
+  with open(output_path, 'w', newline='') as fp:
+    writer = csv.DictWriter(fp, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(rows)
 
 
 def record_experiment(args, mode, metrics):
@@ -322,6 +379,71 @@ def calibrate_dev(args):
 
 
 @torch.no_grad()
+def error_analysis(args):
+  """Write dev-set error samples for qualitative analysis. This never reads test data."""
+  device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
+  model = load_model_for_prediction(args, device)
+
+  para_dev_records = maybe_limit_data(load_paraphrase_data(args.para_dev), args.max_dev_examples)
+  para_dev_data = ParaphraseDetectionDataset(para_dev_records, args)
+  para_dev_dataloader = build_paraphrase_dataloader(para_dev_data, args.batch_size, shuffle=False)
+
+  _, _, y_pred, y_true, sent_ids, yes_probs = model_eval_paraphrase(
+    para_dev_dataloader, model, device, threshold=args.threshold, bidirectional=args.bidirectional,
+    prompt_template=args.prompt_template, max_length=args.max_length
+  )
+
+  examples_by_id = {sent_id: (sent1, sent2) for sent1, sent2, _, sent_id in para_dev_records}
+  candidates = []
+  for sent_id, gold, pred, yes_prob in zip(sent_ids, y_true, y_pred, yes_probs):
+    sent1, sent2 = examples_by_id[sent_id]
+    gold = int(gold)
+    pred = int(pred)
+    candidates.append({
+      'id': sent_id,
+      'sentence1': sent1,
+      'sentence2': sent2,
+      'gold': gold,
+      'pred': pred,
+      'yes_prob': float(yes_prob),
+      'error_type': classify_error_type(sent1, sent2, gold, pred),
+      'notes': '',
+    })
+
+  rng = random.Random(args.seed)
+
+  def sample_rows(rows, limit, note):
+    rows = list(rows)
+    if len(rows) > limit:
+      rows = rng.sample(rows, limit)
+    sampled = []
+    for row in rows:
+      row = dict(row)
+      row['notes'] = note
+      row['yes_prob'] = f"{row['yes_prob']:.6f}"
+      sampled.append(row)
+    return sampled
+
+  false_positive = [row for row in candidates if row['gold'] == 0 and row['pred'] == 1]
+  false_negative = [row for row in candidates if row['gold'] == 1 and row['pred'] == 0]
+  selected_rows = []
+  selected_rows.extend(sample_rows(false_positive, args.error_sample_size, 'false_positive'))
+  selected_rows.extend(sample_rows(false_negative, args.error_sample_size, 'false_negative'))
+
+  selected_ids = {row['id'] for row in selected_rows}
+  borderline = sorted(
+    [row for row in candidates if row['id'] not in selected_ids],
+    key=lambda row: abs(row['yes_prob'] - args.threshold)
+  )
+  selected_rows.extend(sample_rows(borderline[:args.borderline_sample_size],
+                                  args.borderline_sample_size, 'borderline'))
+
+  write_error_analysis(args.error_analysis_out, selected_rows)
+  print(f"wrote {len(selected_rows)} dev error-analysis rows to {args.error_analysis_out}")
+  record_experiment(args, 'error_analysis', {'dev_acc': 'NA', 'dev_f1': 'NA'})
+
+
+@torch.no_grad()
 def predict_test(args):
   """Generate final test predictions. Use only after dev settings are fixed."""
   device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
@@ -360,11 +482,14 @@ def get_args():
   parser.add_argument("--max_length", type=int, default=None)
   parser.add_argument("--prompt_template", type=str, choices=sorted(PARAPHRASE_PROMPT_TEMPLATES), default=None)
   parser.add_argument("--mode", type=str,
-                      choices=['train_dev', 'dev_predict', 'calibrate_dev', 'test_predict'],
+                      choices=['train_dev', 'dev_predict', 'calibrate_dev', 'error_analysis', 'test_predict'],
                       default='train_dev')
   parser.add_argument("--output_tag", type=str, default=None)
   parser.add_argument("--filepath", type=str, default=None)
   parser.add_argument("--experiment_log", type=str, default="results/paraphrase_experiments.csv")
+  parser.add_argument("--error_analysis_out", type=str, default="results/error_analysis_para.csv")
+  parser.add_argument("--error_sample_size", type=int, default=50)
+  parser.add_argument("--borderline_sample_size", type=int, default=50)
   parser.add_argument("--bidirectional", action='store_true')
   parser.add_argument("--threshold", type=float, default=0.5)
   parser.add_argument("--threshold_min", type=float, default=0.30)
@@ -425,5 +550,7 @@ if __name__ == "__main__":
     predict_dev(args)
   elif args.mode == 'calibrate_dev':
     calibrate_dev(args)
+  elif args.mode == 'error_analysis':
+    error_analysis(args)
   elif args.mode == 'test_predict':
     predict_test(args)
