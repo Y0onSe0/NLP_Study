@@ -41,7 +41,13 @@ Clone/update:
 
 ```bash
 BASE=/content/drive/MyDrive/NLP_Study_PART2
-git clone -b part2 --single-branch https://github.com/Y0onSe0/NLP_Study.git "$BASE"
+if [ -e "$BASE" ] && [ ! -d "$BASE/.git" ]; then
+  BACKUP="${BASE}_backup_$(date +%Y%m%d_%H%M%S)"
+  mv "$BASE" "$BACKUP"
+fi
+if [ ! -d "$BASE/.git" ]; then
+  git clone -b part2 --single-branch https://github.com/Y0onSe0/NLP_Study.git "$BASE"
+fi
 cd "$BASE"
 git pull --ff-only origin part2
 mkdir -p checkpoints predictions results logs
