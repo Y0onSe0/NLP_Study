@@ -1,98 +1,99 @@
 # PART2 Colab GPU run guide
 
-This guide is for running the `part2` branch on Google Colab GPU while keeping useful outputs in Google Drive.
+Use the notebook `PART2_Colab_Run.ipynb` on Google Colab with GPU enabled.
 
-## Local PC power setting already applied
+This version avoids the previous Drive Git-folder problem:
 
-While plugged in, this Windows PC has been set to:
+- source code is cloned fresh into `/content/NLP_Study_PART2_CODE` every runtime
+- long-lived outputs are stored in `/content/drive/MyDrive/NLP_Study_PART2_OUTPUT`
+- prompt screening selects the best prompt automatically
+- threshold calibration writes the selected threshold automatically
+- no Git commands are run inside the Drive output folder
+- any previous `results/paraphrase_experiments.csv` is backed up before a new run starts
 
-```powershell
-powercfg /change standby-timeout-ac 0
-powercfg /change monitor-timeout-ac 0
-powercfg /change hibernate-timeout-ac 0
-```
+## How to run
 
-That means AC-powered sleep, display timeout, and hibernate timeout are disabled. Keep the laptop plugged in.
+1. Open:
+   <https://colab.research.google.com/github/Y0onSe0/NLP_Study/blob/part2/PART2_Colab_Run.ipynb>
+2. Select `Runtime > Change runtime type > GPU`.
+3. Run cells from top to bottom.
 
-To restore later:
+You do not need to edit the notebook for the normal run.
 
-```powershell
-powercfg /change standby-timeout-ac 30
-powercfg /change monitor-timeout-ac 10
-powercfg /change hibernate-timeout-ac 0
-```
+## Output locations
 
-## Colab setup
-
-1. Open Google Colab.
-2. Runtime > Change runtime type > GPU.
-3. Upload/open `PART2_Colab_Run.ipynb`.
-4. Run the cells from top to bottom.
-
-Colab has runtime limits, so do not rely on browser keep-alive tricks. The notebook stores checkpoints, predictions, results, and logs in:
+All important files are saved under:
 
 ```text
-/content/drive/MyDrive/NLP_Study_PART2
+/content/drive/MyDrive/NLP_Study_PART2_OUTPUT
 ```
 
-## Core commands used in the notebook
+Expected subfolders:
 
-Clone/update:
+```text
+checkpoints/
+logs/
+predictions/
+results/
+```
+
+Main final files:
+
+```text
+checkpoints/prompt-full.pt
+predictions/para-test-final.csv
+results/paraphrase_experiments.csv
+results/error_analysis_para.csv
+```
+
+## Core setup cell
+
+The notebook uses this structure:
 
 ```bash
-BASE=/content/drive/MyDrive/NLP_Study_PART2
-if [ -e "$BASE" ] && [ ! -d "$BASE/.git" ]; then
-  BACKUP="${BASE}_backup_$(date +%Y%m%d_%H%M%S)"
-  mv "$BASE" "$BACKUP"
+CODE=/content/NLP_Study_PART2_CODE
+OUT=/content/drive/MyDrive/NLP_Study_PART2_OUTPUT
+
+rm -rf "$CODE"
+git clone -b part2 --single-branch https://github.com/Y0onSe0/NLP_Study.git "$CODE"
+mkdir -p "$OUT/checkpoints" "$OUT/predictions" "$OUT/results" "$OUT/logs"
+if [ -f "$OUT/results/paraphrase_experiments.csv" ]; then
+  cp "$OUT/results/paraphrase_experiments.csv" "$OUT/results/paraphrase_experiments.backup_$(date +%Y%m%d_%H%M%S).csv"
+  rm "$OUT/results/paraphrase_experiments.csv"
 fi
-if [ ! -d "$BASE/.git" ]; then
-  git clone -b part2 --single-branch https://github.com/Y0onSe0/NLP_Study.git "$BASE"
-fi
-cd "$BASE"
-git pull --ff-only origin part2
-mkdir -p checkpoints predictions results logs
 ```
 
-Install packages:
+This is intentional. The code clone is disposable, while outputs survive Colab disconnects.
+
+## Package install
+
+The notebook installs the Colab-friendly packages directly:
 
 ```bash
-pip install transformers==4.46.3 tokenizers==0.20.0 einops==0.8.0 sacrebleu==2.5.1 explainaboard_client==0.0.7 tqdm==4.58.0
+pip install -q \
+  transformers==4.46.3 \
+  tokenizers==0.20.0 \
+  einops==0.8.0 \
+  sacrebleu==2.5.1 \
+  tqdm==4.58.0 \
+  scikit-learn \
+  pandas
 ```
 
-Smoke test:
+## Full automated flow
 
-```bash
-python paraphrase_detection.py \
-  --use_gpu \
-  --mode train_dev \
-  --epochs 1 \
-  --batch_size 2 \
-  --max_train_examples 128 \
-  --max_dev_examples 128 \
-  --prompt_template baseline \
-  --output_tag smoke-baseline
-```
+The notebook runs:
 
-Prompt screening:
+1. GPU and Drive setup
+2. fresh `part2` clone into `/content`
+3. package install
+4. smoke test
+5. prompt screening for `baseline`, `direct`, `meaning`
+6. automatic best prompt selection by dev accuracy
+7. full training with the selected prompt
+8. bidirectional dev prediction
+9. automatic threshold calibration
+10. error analysis
+11. final test prediction
 
-```bash
-python paraphrase_detection.py --use_gpu --mode train_dev --epochs 1 --batch_size 8 --max_train_examples 20000 --max_dev_examples 5000 --prompt_template baseline --output_tag screen-baseline
-python paraphrase_detection.py --use_gpu --mode train_dev --epochs 1 --batch_size 8 --max_train_examples 20000 --max_dev_examples 5000 --prompt_template direct --output_tag screen-direct
-python paraphrase_detection.py --use_gpu --mode train_dev --epochs 1 --batch_size 8 --max_train_examples 20000 --max_dev_examples 5000 --prompt_template meaning --output_tag screen-meaning
-```
-
-Full training, after choosing `BEST_PROMPT`:
-
-```bash
-python paraphrase_detection.py \
-  --use_gpu \
-  --mode train_dev \
-  --epochs 10 \
-  --batch_size 8 \
-  --lr 1e-5 \
-  --prompt_template "$BEST_PROMPT" \
-  --output_tag prompt-full \
-  --filepath checkpoints/prompt-full.pt
-```
-
-After full training, run dev prediction, threshold calibration, error analysis, and final test prediction from the notebook.
+Colab can still disconnect because runtime limits are controlled by Google, but checkpoints/logs/results/predictions are written to Drive.
