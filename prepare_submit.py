@@ -3,13 +3,28 @@
 import os
 import zipfile
 
+def listed_files(path):
+    return [os.path.join(path, p) for p in os.listdir(path)
+            if os.path.isfile(os.path.join(path, p))]
+
+required_prediction_files = [
+    'predictions/last-linear-layer-sst-dev-out.csv',
+    'predictions/last-linear-layer-sst-test-out.csv',
+    'predictions/full-model-sst-dev-out.csv',
+    'predictions/full-model-sst-test-out.csv',
+    'predictions/last-linear-layer-cfimdb-dev-out.csv',
+    'predictions/last-linear-layer-cfimdb-test-out.csv',
+    'predictions/full-model-cfimdb-dev-out.csv',
+    'predictions/full-model-cfimdb-test-out.csv',
+]
+
 required_files = [p for p in os.listdir('.') if p.endswith('.py')] + \
-                 [f'predictions/{p}' for p in os.listdir('predictions')] + \
-                     [f'models/{p}' for p in os.listdir('models')] + \
-                        [f'modules/{p}' for p in os.listdir('modules')]
+                 required_prediction_files + \
+                     listed_files('models') + \
+                        listed_files('modules')
 
 def main():
-    aid = 'nlp2025-1_project_outputs'
+    aid = 'nlp2026-final-outputs'
 
     with zipfile.ZipFile(f"{aid}.zip", 'w') as zz:
         for file in required_files:

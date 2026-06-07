@@ -28,6 +28,31 @@
 
 두 파일에 있는 누락된 코드 블록을 완성하는 것도 중요하지만, PART-II의 핵심은 기능의 확장에 있다. GPT-2 모델을 수정하여 한 문장이 다른 문장의 패러프레이즈인지 판단하는 능력과 소네트를 생성하는 능력을 개선하는 방법에 촛점을 맞추도록 하자.
 
+## 제출 전 확인
+
+### Part-I 필수 파일 및 prediction 확인
+
+```bash
+python -m py_compile modules/attention.py modules/gpt2_layer.py models/base_gpt.py models/gpt2.py classifier.py optimizer.py paraphrase_detection.py datasets.py evaluation.py
+python prepare_submit.py
+ls -lh nlp2026-final-outputs.zip
+unzip -l nlp2026-final-outputs.zip | head -50
+```
+
+Part-I SST/CFIMDB prediction 파일은 `predictions/` 아래에 있어야 하며, 각 CSV는 `id, Predicted_Sentiment` 형식의 header와 id별 예측 label을 포함해야 한다.
+
+### Part-II Paraphrase Detection 확인
+
+```bash
+python paraphrase_detection.py --help
+```
+
+`paraphrase_detection.py`의 실행 모드는 `train_dev`, `dev_predict`, `calibrate_dev`, `error_analysis`, `test_predict`이다. Prompt 선택, threshold calibration, error analysis는 train/dev 기준으로만 수행하고, test set은 checkpoint, prompt, threshold가 모두 확정된 뒤 최종 prediction 생성에만 사용한다. 자세한 실험 절차는 `docs/part2/` 문서를 참고한다.
+
+### 데이터셋 준비
+
+현재 실행에 필요한 소규모 과제 데이터는 `data/` 폴더에 포함되어 있다. 평가자는 별도 다운로드 없이 기본 경로의 `data/*.csv`와 `data/*.txt`를 사용해 실행할 수 있어야 한다.
+
 ## 환경 설정
 **주목**: .yml 파일의 버전을 변경하지 말것.
 

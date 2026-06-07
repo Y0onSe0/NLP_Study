@@ -58,6 +58,14 @@ class ParaphraseGPT(nn.Module):
     self.no_token_id = args.no_token_id
     self.yes_token_id = args.yes_token_id
 
+    # Note:
+    # The original starter code may suggest a separate paraphrase_detection_head.
+    # We intentionally do not use a separate binary classification head here because
+    # Part-II is implemented as a cloze-style task: the model answers the prompt by
+    # generating/scoring the next token "yes" or "no". Therefore, paraphrase
+    # prediction is computed from the GPT-2 language-model token distribution rather
+    # than from an additional classifier head.
+
     # 기본적으로, 전체 모델을 finetuning 한다.
     for param in self.gpt.parameters():
       param.requires_grad = True
