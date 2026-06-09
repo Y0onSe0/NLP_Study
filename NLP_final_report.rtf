@@ -1,0 +1,5623 @@
+{\rtf1\ansi\ansicpg949\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Bold;\f1\fnil\fcharset129 AppleMyungjo;\f2\froman\fcharset0 Times-Roman;
+\f3\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 GPT-2 
+\f1\b0 \'b1\'b8\'c7\'f6\'b0\'fa
+\f0\b  Cloze-style Paraphrase Detection 
+\f1\b0 \'b0\'b3\'bc\'b1
+\f0\b : Prompt Selection, Bidirectional Inference, Threshold Calibration
+\f1\b0 \'c0\'bb
+\f0\b  
+\f1\b0 \'c1\'df\'bd\'c9\'c0\'b8\'b7\'ce
+\f2\fs24 \
+\pard\pardeftab720\sa320\qr\partightenfactor0
+
+\f1\fs32 \cf0 \'c1\'f6\'c1\'a4
+\f0\b  
+\f1\b0 \'c1\'d6\'c1\'a6
+\f0\b : GPT-2 
+\f1\b0 \'b1\'b8\'c3\'e0
+\f0\b  
+\f1\b0 \'b9\'d7
+\f0\b  
+\f1\b0 \'c8\'c4\'bc\'d3
+\f0\b  
+\f1\b0 \'c5\'c2\'bd\'ba\'c5\'a9
+\f0\b  
+\f1\b0 \'bd\'c7\'c7\'e8
+\f2\fs24 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 3. 
+\f1\b0 \'c6\'c0\'bf\'f8
+\f0\b \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1063\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth5583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\qc\partightenfactor0
+
+\f1\b0\fs32 \cf0 \'c0\'cc\'b8\'a7
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\qc\partightenfactor0
+
+\f1\fs32 \cf0 \'c7\'d0\'b9\'f8
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\qc\partightenfactor0
+
+\f1\fs32 \cf0 \'c0\'cc\'b8\'de\'c0\'cf
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\qc\partightenfactor0
+
+\f1\fs32 \cf0 \'b4\'e3\'b4\'e7
+\f0\b  
+\f1\b0 \'bf\'aa\'c7\'d2
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1063\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth5583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f1\fs32 \cf0 \'c0\'cc\'c1\'d8\'c7\'f5
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 2021112433
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 2t6shg@gmail.com
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 PART-I optimizer.py, attention.py, gpt2_layer.py 
+\f1 \'b1\'b8\'c7\'f6
+\f2  / PART-II Paraphrase Detection 
+\f1 \'b1\'b8\'c7\'f6
+\f2  
+\f1 \'b9\'d7
+\f2  
+\f1 \'b0\'b3\'bc\'b1
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1063\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth5583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\f1\fs32 \cf0 \'c0\'e5\'c0\'b1\'bc\'ad
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 2022110484
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 [
+\f1 \'c0\'cc\'b8\'de\'c0\'cf
+\f2  
+\f1 \'b1\'e2\'c0\'d4
+\f2 ]
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+
+\fs32 \cf0 PART-I models/gpt2.py, classifier.py 
+\f1 \'b1\'b8\'c7\'f6
+\f2  
+\f1 \'b9\'d7
+\f2  SST/CFIMDB 
+\f1 \'bd\'c7\'c7\'e8
+\f2  / PART-II Paraphrase Detection 
+\f1 \'b1\'b8\'c7\'f6
+\f2  
+\f1 \'b9\'d7
+\f2  
+\f1 \'b0\'b3\'bc\'b1
+\f2\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 4. 
+\f1\b0 \'c3\'ca\'b7\'cf
+\f0\b \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\b0\fs26\fsmilli13333 \cf0 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'b4\'c2
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'b1\'b8\'bc\'ba
+\f2  
+\f1 \'bf\'e4\'bc\'d2\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'b1\'b8\'c7\'f6\'c7\'d1
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'bb
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'b9\'d7
+\f2  Paraphrase Detection 
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'bb
+\f2  
+\f1 \'b8\'f1\'c7\'a5\'b7\'ce
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 . PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  AdamW optimizer, causal self-attention, GPT-2 layer, token embedding, weight tying, sentiment classifier
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  SST
+\f1 \'bf\'cd
+\f2  CFIMDB 
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c0\'bb
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'d1
+\f2  GPT-2 
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'b4\'d9\'bf\'ee\'bd\'ba\'c6\'ae\'b8\'b2
+\f2  
+\f1 \'ba\'d0\'b7\'f9
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'b5\'c9
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 \uc0\u8232 PART-II
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  Quora Question Pairs 
+\f1 \'b1\'e2\'b9\'dd
+\f2  Paraphrase Detection
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'b0\'fa\'c1\'a6\'c0\'c7
+\f2  
+\f1 \'bc\'b3\'c1\'a4\'bf\'a1
+\f2  
+\f1 \'b5\'fb\'b6\'f3
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b8\'a6
+\f2  
+\f1 \'c0\'cf\'b9\'dd\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'c0\'cc\'c1\'f8
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'b0\'a1
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  next-token prediction 
+\f1 \'b1\'b8\'c1\'b6\'bf\'a1
+\f2  
+\f1 \'b8\'c2\'c3\'e1
+\f2  Cloze-style yes/no prediction 
+\f1 \'b9\'ae\'c1\'a6\'b7\'ce
+\f2  
+\f1 \'c0\'e7\'b1\'b8\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'bb
+\f2  prompt
+\f1 \'b7\'ce
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'c7\'d1
+\f2  
+\f1 \'b5\'da
+\f2 , 
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c5\'e4\'c5\'ab\'c0\'b8\'b7\'ce
+\f2  \'93yes\'94 
+\f1 \'b6\'c7\'b4\'c2
+\f2  \'93no\'94
+\f1 \'b8\'a6
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'bc\'ba\'b4\'c9
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c0\'bb
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  prompt template 
+\f1 \'ba\'f1\'b1\'b3
+\f2 , bidirectional inference, dev set 
+\f1 \'b1\'e2\'b9\'dd
+\f2  threshold calibration
+\f1 \'c0\'bb
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'bd\'c7\'c7\'e8
+\f2  
+\f1 \'b0\'e1\'b0\'fa
+\f2 , prompt template 
+\f1 \'c1\'df
+\f2  direct
+\f1 \'b0\'a1
+\f2  
+\f1 \'b0\'a1\'c0\'e5
+\f2  
+\f1 \'c1\'c1\'c0\'ba
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'b4\'b0\'ed
+\f2 , 
+\f1 \'c0\'fc\'c3\'bc
+\f2  train set
+\f1 \'c0\'b8\'b7\'ce
+\f2  3 epoch 
+\f1 \'c7\'d0\'bd\'c0\'c7\'d1
+\f2  
+\f1 \'c8\'c4
+\f2  dev accuracy 0.887, dev F1 0.880
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'e2\'b7\'cf\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  bidirectional inference
+\f1 \'b8\'a6
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'a9
+\f2  dev accuracy
+\f1 \'b8\'a6
+\f2  0.890
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , threshold calibration
+\f1 \'c0\'bb
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  dev accuracy 0.892, dev F1 0.884
+\f1 \'b8\'a6
+\f2  
+\f1 \'b4\'de\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  checkpoints/full-direct-paraphrase.pt
+\f1 \'b7\'ce
+\f2  
+\f1 \'c0\'fa\'c0\'e5\'c7\'cf\'bf\'b4\'c0\'b8\'b8\'e7
+\f2 , 
+\f1 \'c3\'d6\'c1\'be
+\f2  test prediction
+\f1 \'c0\'ba
+\f2  predictions/para-test-final.csv
+\f1 \'b7\'ce
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 5. 
+\f1\b0 \'bc\'ad\'b7\'d0
+\f0\b \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 GPT 
+\f1 \'b0\'e8\'bf\'ad
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'b4\'eb\'b1\'d4\'b8\'f0
+\f2  
+\f1 \'c5\'d8\'bd\'ba\'c6\'ae\'b7\'ce
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0\'b5\'c8
+\f2  decoder-only Transformer
+\f1 \'b8\'a6
+\f2  
+\f1 \'b4\'d9\'be\'e7\'c7\'d1
+\f2  
+\f1 \'c0\'da\'bf\'ac\'be\'ee\'c3\'b3\'b8\'ae
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8
+\f2  
+\f1 \'b4\'eb\'c7\'a5\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'be\'f0\'be\'ee
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'bc\'f8\'c8\'f7
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'bb
+\f2  
+\f1 \'ba\'d2\'b7\'af\'bf\'cd
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b5\'a5
+\f2  
+\f1 \'b1\'d7\'c4\'a1\'c1\'f6
+\f2  
+\f1 \'be\'ca\'b0\'ed
+\f2 , GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'b3\'bb\'ba\'ce
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'d1
+\f2  
+\f1 \'b5\'da
+\f2  
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'b4\'d9\'bf\'ee\'bd\'ba\'c6\'ae\'b8\'b2
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'bb
+\f2  
+\f1 \'b8\'f1\'c7\'a5\'b7\'ce
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  self-attention, residual connection, layer normalization, language modeling head, fine-tuning 
+\f1 \'b0\'fa\'c1\'a4\'c0\'cc
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'b8\'f0\'b5\'a8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'b0\'fa
+\f2  
+\f1 \'be\'ee\'b6\'bb\'b0\'d4
+\f2  
+\f1 \'bf\'ac\'b0\'e1\'b5\'c7\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b0\'ed\'c0\'da
+\f2  
+\f1 \'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'c0\'cc\'b8\'a6
+\f2  SST
+\f1 \'bf\'cd
+\f2  CFIMDB 
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'c0\'ba
+\f2  
+\f1 \'b4\'dc\'c0\'cf
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b8\'a6
+\f2  label
+\f1 \'b7\'ce
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'c0\'cc\'b9\'c7\'b7\'ce
+\f2 , GPT-2
+\f1 \'b0\'a1
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'bb
+\f2  
+\f1 \'b4\'d9\'bf\'ee\'bd\'ba\'c6\'ae\'b8\'b2
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'bf\'a1
+\f2  
+\f1 \'c8\'b0\'bf\'eb\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'b7\'ce
+\f2  
+\f1 \'c0\'fb\'c0\'fd\'c7\'cf\'b4\'d9
+\f2 . PART-II
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'c7\'d1
+\f2  
+\f1 \'b4\'dc\'b0\'e8
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'b3\'aa\'be\'c6\'b0\'a1
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'bb\'e7\'c0\'cc\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'b0\'fc\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'cf\'b4\'c2
+\f2  Paraphrase Detection
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Paraphrase Detection
+\f1 \'c0\'ba
+\f2  
+\f1 \'b4\'dc\'be\'ee
+\f2  
+\f1 \'c1\'df\'ba\'b9\'b8\'b8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c7\'d8\'b0\'e1\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'be\'ee\'b7\'c1\'bf\'ee
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'cc
+\f2  
+\f1 \'ba\'f1\'bd\'c1\'c7\'d1
+\f2  
+\f1 \'b4\'dc\'be\'ee\'b8\'a6
+\f2  
+\f1 \'b0\'f8\'c0\'af\'c7\'cf\'b4\'f5\'b6\'f3\'b5\'b5
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'d9\'b8\'a6
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b0\'ed
+\f2 , 
+\f1 \'b9\'dd\'b4\'eb\'b7\'ce
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'ba
+\f2  
+\f1 \'b4\'d9\'b8\'a3\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b8\'a6
+\f2  
+\f1 \'b0\'a1\'c1\'fa
+\f2  
+\f1 \'bc\'f6\'b5\'b5
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'b4\'c2
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bd\'d6\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'c0\'fb
+\f2  
+\f1 \'b0\'fc\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'be\'f3\'b8\'b6\'b3\'aa
+\f2  
+\f1 \'c0\'df
+\f2  
+\f1 \'c6\'f7\'c2\'f8\'c7\'cf\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b5\'a5
+\f2  
+\f1 \'c0\'fb\'c7\'d5\'c7\'cf\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b4\'d9\'b7\'e9
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b4\'c2
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'c0\'fb
+\f2  
+\f1 \'c6\'af\'bc\'ba\'b0\'fa
+\f2  Paraphrase Detection 
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9
+\f2  
+\f1 \'bb\'e7\'c0\'cc\'c0\'c7
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'c0\'cc\'b4\'d9
+\f2 . GPT-2
+\f1 \'b4\'c2
+\f2  
+\f1 \'bf\'de\'c2\'ca\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bf\'c0\'b8\'a5\'c2\'ca\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c5\'e4\'c5\'ab\'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'b5\'c8
+\f2  decoder-only language model
+\f1 \'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'b9\'dd\'b8\'e9
+\f2  Paraphrase Detection
+\f1 \'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'bb
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'c0\'fb
+\f2  
+\f1 \'b5\'bf\'b5\'ee\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'d8\'be\'df
+\f2  
+\f1 \'c7\'cf\'b4\'c2
+\f2  sentence-pair task
+\f1 \'c0\'cc\'b4\'d9
+\f2 . BERT
+\f1 \'bf\'cd
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  encoder 
+\f1 \'b1\'e2\'b9\'dd
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'bb
+\f2  
+\f1 \'be\'e7\'b9\'e6\'c7\'e2
+\f2  context 
+\f1 \'be\'c8\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b5\'bf\'bd\'c3\'bf\'a1
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c1\'f6\'b8\'b8
+\f2 , GPT-2
+\f1 \'b4\'c2
+\f2  prompt
+\f1 \'c0\'c7
+\f2  
+\f1 \'b8\'b6\'c1\'f6\'b8\'b7
+\f2  
+\f1 \'c0\'a7\'c4\'a1\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c5\'e4\'c5\'ab\'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'d8\'be\'df
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'c2\'f7\'c0\'cc
+\f2  
+\f1 \'b6\'a7\'b9\'ae\'bf\'a1
+\f2  prompt
+\f1 \'c0\'c7
+\f2  
+\f1 \'c7\'a5\'c7\'f6
+\f2  
+\f1 \'b9\'e6\'bd\'c4
+\f2 , 
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'bc\'f8\'bc\'ad
+\f2 , yes/no 
+\f1 \'c6\'c7\'c1\'a4
+\f2  threshold
+\f1 \'b0\'a1
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'c1\'d9
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'bf\'ac\'b1\'b8\'c0\'c7
+\f2  
+\f1 \'b1\'e2\'bf\'a9\'b4\'c2
+\f2  
+\f1 \'b4\'d9\'c0\'bd\'b0\'fa
+\f2  
+\f1 \'b0\'b0\'b4\'d9
+\f2 . 
+\f1 \'c3\'b9\'c2\'b0
+\f2 , GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'c1\'d6\'bf\'e4
+\f2  
+\f1 \'b1\'b8\'bc\'ba
+\f2  
+\f1 \'bf\'e4\'bc\'d2\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'b0\'ed
+\f2 , optimizer test
+\f1 \'bf\'cd
+\f2  sanity check 
+\f1 \'b9\'d7
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c0\'bb
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c0\'c7
+\f2  
+\f1 \'c5\'b8\'b4\'e7\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b5\'d1\'c2\'b0
+\f2 , Paraphrase Detection
+\f1 \'c0\'bb
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  next-token prediction 
+\f1 \'b1\'b8\'c1\'b6\'bf\'a1
+\f2  
+\f1 \'b8\'c2\'c3\'e7
+\f2  Cloze-style yes/no prediction 
+\f1 \'b9\'ae\'c1\'a6\'b7\'ce
+\f2  
+\f1 \'b1\'b8\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'bc\'c2\'c2\'b0
+\f2 , prompt template, bidirectional inference, threshold calibration
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'f8\'c2\'f7\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'b0\'a2
+\f2  
+\f1 \'b9\'e6\'b9\'fd\'c0\'c7
+\f2  
+\f1 \'c8\'bf\'b0\'fa\'b8\'a6
+\f2  dev set 
+\f1 \'bc\'ba\'b4\'c9\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b3\'dd\'c2\'b0
+\f2 , 
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'c7
+\f2  
+\f1 \'bf\'c0\'b7\'f9\'b8\'a6
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'c7\'cf\'bf\'a9
+\f2  GPT-2 
+\f1 \'b1\'e2\'b9\'dd
+\f2  cloze-style 
+\f1 \'c1\'a2\'b1\'d9\'c0\'cc
+\f2  
+\f1 \'be\'ee\'b6\'b2
+\f2  
+\f1 \'c0\'af\'c7\'fc\'c0\'c7
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bd\'d6\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b0\'ad\'c1\'a1\'b0\'fa
+\f2  
+\f1 \'c7\'d1\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'ba\'b8\'c0\'cc\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c1\'a4\'b8\'ae\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 6. 
+\f1\b0 \'b0\'fc\'b7\'c3
+\f0\b  
+\f1\b0 \'bf\'ac\'b1\'b8
+\f0\b \
+\pard\pardeftab720\sa320\partightenfactor0
+\cf0 6.1 Transformer
+\f1\b0 \'bf\'cd
+\f0\b  GPT 
+\f1\b0 \'b0\'e8\'bf\'ad
+\f0\b  
+\f1\b0 \'b8\'f0\'b5\'a8
+\f2\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Transformer
+\f1 \'b4\'c2
+\f2  self-attention
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'e2\'b9\'dd\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bd\'c3\'c4\'f6\'bd\'ba
+\f2  
+\f1 \'c1\'a4\'ba\'b8\'b8\'a6
+\f2  
+\f1 \'c3\'b3\'b8\'ae\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc\'b4\'d9
+\f2 . Attention
+\f1 \'c0\'ba
+\f2  query
+\f1 \'b0\'a1
+\f2  key-value 
+\f1 \'c1\'fd\'c7\'d5\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'c7\'d1
+\f2  
+\f1 \'c1\'a4\'ba\'b8\'b8\'a6
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bf\'e4\'be\'e0\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'cc\'c7\'d8\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b1\'e2\'c1\'b8
+\f2  RNN 
+\f1 \'b1\'e2\'b9\'dd
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'bc\'f8\'c8\'af
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'bc\'f8\'c2\'f7
+\f2  
+\f1 \'c1\'a4\'ba\'b8\'b8\'a6
+\f2  
+\f1 \'c0\'fc\'b4\'de\'c7\'df\'c1\'f6\'b8\'b8
+\f2 , Transformer
+\f1 \'b4\'c2
+\f2  self-attention
+\f1 \'c0\'bb
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'c5\'e4\'c5\'ab
+\f2  
+\f1 \'b0\'a3\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'c1\'b8\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'ba\'b4\'b7\'c4\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'e8\'bb\'ea\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b4\'c2
+\f2  
+\f1 \'b1\'e4
+\f2  
+\f1 \'b9\'ae\'b8\'c6\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'c1\'b8\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c1\'f7\'c1\'a2\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'b8\'b5\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'b8\'b8\'e7
+\f2 , 
+\f1 \'c0\'cc\'c8\'c4
+\f2  
+\f1 \'b4\'eb\'b1\'d4\'b8\'f0
+\f2  
+\f1 \'be\'f0\'be\'ee
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'c7
+\f2  
+\f1 \'b1\'e2\'ba\'bb
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b0\'a1
+\f2  
+\f1 \'b5\'c7\'be\'fa\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 GPT
+\f1 \'b4\'c2
+\f2  Transformer decoder
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'e2\'b9\'dd\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c7\'cf\'b4\'c2
+\f2  language model
+\f1 \'c0\'cc\'b4\'d9
+\f2 . GPT 
+\f1 \'b0\'e8\'bf\'ad
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'bf\'de\'c2\'ca
+\f2  
+\f1 \'b9\'ae\'b8\'c6\'c0\'cc
+\f2  
+\f1 \'c1\'d6\'be\'ee\'c1\'b3\'c0\'bb
+\f2  
+\f1 \'b6\'a7
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c5\'e4\'c5\'ab\'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0\'b5\'c8\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b7\'af\'c7\'d1
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'ba
+\f2  
+\f1 \'b4\'eb\'b1\'d4\'b8\'f0
+\f2  unlabeled text
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c0\'cf\'b9\'dd\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'be\'f0\'be\'ee
+\f2  
+\f1 \'c6\'d0\'c5\'cf\'c0\'bb
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'c7\'cf\'b0\'d4
+\f2  
+\f1 \'c7\'cf\'b8\'e7
+\f2 , 
+\f1 \'c0\'cc\'c8\'c4
+\f2  
+\f1 \'c8\'c4\'bc\'d3
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  fine-tuning
+\f1 \'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b4\'d9\'be\'e7\'c7\'d1
+\f2  
+\f1 \'c0\'da\'bf\'ac\'be\'ee\'c3\'b3\'b8\'ae
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'c0\'c7
+\f2  GPT-2 
+\f1 \'b1\'b8\'c7\'f6
+\f2  
+\f1 \'bf\'aa\'bd\'c3
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'b5\'fb\'b8\'a5\'b4\'d9
+\f2 . PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  token embedding, positional embedding, causal self-attention, Transformer block, language modeling head
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'b0\'ed
+\f2 , HuggingFace
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'c7\'cf\'b4\'c2
+\f2  pretrained weight
+\f1 \'b8\'a6
+\f2  
+\f1 \'b7\'ce\'b5\'e5\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c8\'c4\'bc\'d3
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c8\'b0\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs48 \cf0 6.2 Contextualized Representation
+\f1\b0 \'b0\'fa
+\f0\b  Fine-tuning
+\f2\b0\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'fc\'c5\'eb\'c0\'fb\'c0\'ce
+\f2  word embedding
+\f1 \'c0\'ba
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'b4\'dc\'be\'ee\'c7\'fc\'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d8
+\f2  
+\f1 \'c7\'d7\'bb\'f3
+\f2  
+\f1 \'b5\'bf\'c0\'cf\'c7\'d1
+\f2  
+\f1 \'ba\'a4\'c5\'cd\'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'d1\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'c7\'d1\'b0\'e8\'b0\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b1\'d7\'b7\'af\'b3\'aa
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'b4\'dc\'be\'ee
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b4\'c2
+\f2  
+\f1 \'b9\'ae\'b8\'c6\'bf\'a1
+\f2  
+\f1 \'b5\'fb\'b6\'f3
+\f2  
+\f1 \'b4\'de\'b6\'f3\'c1\'f8\'b4\'d9
+\f2 . 
+\f1 \'bf\'b9\'b8\'a6
+\f2  
+\f1 \'b5\'e9\'be\'ee
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'b4\'dc\'be\'ee\'b6\'f3\'b5\'b5
+\f2  
+\f1 \'c1\'d6\'ba\'af
+\f2  
+\f1 \'b4\'dc\'be\'ee\'bf\'cd
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'bf\'a1
+\f2  
+\f1 \'b5\'fb\'b6\'f3
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'de\'b6\'f3\'c1\'fa
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . ELMo, BERT, GPT
+\f1 \'bf\'cd
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  contextualized language model
+\f1 \'c0\'ba
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b8\'a6
+\f2  
+\f1 \'c7\'d8\'b0\'e1\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  
+\f1 \'b9\'ae\'b8\'c6\'bf\'a1
+\f2  
+\f1 \'c1\'b6\'b0\'c7\'c8\'ad\'b5\'c8
+\f2  token representation
+\f1 \'c0\'bb
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'b0\'fa
+\f2  Paraphrase Detection
+\f1 \'c0\'bb
+\f2  
+\f1 \'b8\'f0\'b5\'ce
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'d1
+\f2  
+\f1 \'c0\'cc\'c0\'af\'b5\'b5
+\f2  
+\f1 \'bf\'a9\'b1\'e2\'bf\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'c0\'ba
+\f2  
+\f1 \'b4\'dc\'c0\'cf
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'cc
+\f2  label 
+\f1 \'bf\'b9\'c3\'f8\'bf\'a1
+\f2  
+\f1 \'c3\'e6\'ba\'d0\'c7\'d1\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'c0\'cc\'b0\'ed
+\f2 , Paraphrase Detection
+\f1 \'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'c7
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'b0\'fc\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'d8\'be\'df
+\f2  
+\f1 \'c7\'cf\'b4\'c2
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'c1\'ef
+\f2  PART-I
+\f1 \'c0\'ba
+\f2  GPT-2
+\f1 \'b0\'a1
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'b4\'dc\'c0\'a7
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'bb
+\f2  
+\f1 \'b4\'d9\'bf\'ee\'bd\'ba\'c6\'ae\'b8\'b2
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'bf\'a1
+\f2  
+\f1 \'c8\'b0\'bf\'eb\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'b0\'e8\'c0\'cc\'b8\'e7
+\f2 , PART-II
+\f1 \'b4\'c2
+\f2  
+\f1 \'b1\'d7
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'bb
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bd\'d6
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'b0\'fc\'b0\'e8
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c8\'ae\'c0\'e5\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'b0\'e8\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs48 \cf0 6.3 Prompt-based Classification
+\f2\b0\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Prompt-based classification
+\f1 \'c0\'ba
+\f2  
+\f1 \'ba\'d0\'b7\'f9
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b8\'a6
+\f2  language model
+\f1 \'c0\'c7
+\f2  
+\f1 \'bf\'b9\'c3\'f8
+\f2  
+\f1 \'c7\'fc\'bd\'c4\'bf\'a1
+\f2  
+\f1 \'b8\'c2\'c3\'e7
+\f2  
+\f1 \'c0\'e7\'b1\'b8\'bc\'ba\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'c1\'a2\'b1\'d9\'c0\'cc\'b4\'d9
+\f2 . PET
+\f1 \'b4\'c2
+\f2  
+\f1 \'c0\'da\'bf\'ac\'be\'ee
+\f2  
+\f1 \'ba\'d0\'b7\'f9
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b8\'a6
+\f2  cloze-style 
+\f1 \'b9\'ae\'c0\'e5\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b9\'d9\'b2\'d9\'b0\'ed
+\f2 , pretrained language model
+\f1 \'c0\'cc
+\f2  label word
+\f1 \'b8\'a6
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . LM-BFF
+\f1 \'b4\'c2
+\f2  prompt-based fine-tuning
+\f1 \'bf\'a1\'bc\'ad
+\f2  prompt 
+\f1 \'c7\'fc\'bd\'c4\'b0\'fa
+\f2  
+\f1 \'bf\'b9\'bd\'c3
+\f2  
+\f1 \'b1\'b8\'bc\'ba\'c0\'cc
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'c5\'ab
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'c1\'d9
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b7\'af\'c7\'d1
+\f2  
+\f1 \'bf\'ac\'b1\'b8\'b5\'e9\'c0\'ba
+\f2  pretrained language model
+\f1 \'c0\'bb
+\f2  
+\f1 \'b4\'dc\'bc\'f8\'c8\'f7
+\f2  feature extractor
+\f1 \'b7\'ce
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'cc
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2 , 
+\f1 \'b8\'f0\'b5\'a8\'c0\'c7
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b8\'f1\'c7\'a5\'bf\'cd
+\f2  
+\f1 \'c8\'c4\'bc\'d3
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9
+\f2  
+\f1 \'c7\'fc\'bd\'c4\'c0\'bb
+\f2  
+\f1 \'b8\'c2\'c3\'df\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'cc
+\f2  
+\f1 \'c1\'df\'bf\'e4\'c7\'cf\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'c1\'a1\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'c0\'c7
+\f2  PART-II
+\f1 \'b4\'c2
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'b0\'fc\'c1\'a1\'c0\'bb
+\f2  GPT-2 
+\f1 \'b1\'e2\'b9\'dd
+\f2  Paraphrase Detection
+\f1 \'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c1\'f8
+\f2  
+\f1 \'ba\'d0\'b7\'f9
+\f2  head
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'f5\'b7\'ce
+\f2  
+\f1 \'ba\'d9\'c0\'cc\'b4\'c2
+\f2  
+\f1 \'b4\'eb\'bd\'c5
+\f2 , 
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'bb
+\f2  prompt 
+\f1 \'c7\'fc\'c5\'c2\'b7\'ce
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'c7\'cf\'b0\'ed
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c5\'e4\'c5\'ab\'c0\'b8\'b7\'ce
+\f2  \'93yes\'94 
+\f1 \'b6\'c7\'b4\'c2
+\f2  \'93no\'94
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b4\'d9\'b8\'b8
+\f2  PET
+\f1 \'b3\'aa
+\f2  LM-BFF
+\f1 \'b0\'a1
+\f2  
+\f1 \'c1\'d6\'b7\'ce
+\f2  few-shot prompt learning
+\f1 \'bf\'a1
+\f2  
+\f1 \'c3\'ca\'c1\'a1\'c0\'bb
+\f2  
+\f1 \'b5\'d0
+\f2  
+\f1 \'b0\'cd\'b0\'fa
+\f2  
+\f1 \'b4\'de\'b8\'ae
+\f2 , 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'b4\'c2
+\f2  
+\f1 \'b0\'fa\'c1\'a6\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'b5\'c8
+\f2  train set 
+\f1 \'c0\'fc\'c3\'bc\'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'d8
+\f2  fine-tuning
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'c0\'c7
+\f2  
+\f1 \'c3\'ca\'c1\'a1\'c0\'ba
+\f2  few-shot 
+\f1 \'bc\'ba\'b4\'c9\'c0\'cc
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2 , GPT-2
+\f1 \'c0\'c7
+\f2  next-token prediction 
+\f1 \'b1\'b8\'c1\'b6\'bf\'a1\'bc\'ad
+\f2  prompt 
+\f1 \'c7\'fc\'bd\'c4
+\f2 , 
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'bc\'f8\'bc\'ad
+\f2 , threshold
+\f1 \'b0\'a1
+\f2  Paraphrase Detection 
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'be\'ee\'b6\'b2
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'c1\'d6\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b5\'a5
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs48 \cf0 6.4 Verbalizer
+\f1\b0 \'bf\'cd
+\f0\b  Label Word
+\f2\b0\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Prompt-based classification
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  label
+\f1 \'c0\'cc
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  token
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'be\'ee\'b6\'bb\'b0\'d4
+\f2  
+\f1 \'b8\'c5\'c7\'ce\'b5\'c7\'b4\'c2\'c1\'f6\'b0\'a1
+\f2  
+\f1 \'c1\'df\'bf\'e4\'c7\'cf\'b4\'d9
+\f2 . 
+\f1 \'bf\'b9\'b8\'a6
+\f2  
+\f1 \'b5\'e9\'be\'ee
+\f2  
+\f1 \'b1\'e0\'c1\'a4
+\f2 /
+\f1 \'ba\'ce\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'bf\'a1\'bc\'ad
+\f2  label word
+\f1 \'b8\'a6
+\f2  \'93good\'94
+\f1 \'b0\'fa
+\f2  \'93bad\'94
+\f1 \'b7\'ce
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'d2\'c1\'f6
+\f2 , \'93positive\'94
+\f1 \'bf\'cd
+\f2  \'93negative\'94
+\f1 \'b7\'ce
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'d2\'c1\'f6\'bf\'a1
+\f2  
+\f1 \'b5\'fb\'b6\'f3
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'cc
+\f2  
+\f1 \'b4\'de\'b6\'f3\'c1\'fa
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . GPT-2
+\f1 \'b4\'c2
+\f2  
+\f1 \'b9\'ae\'c0\'da\'bf\'ad
+\f2  
+\f1 \'c0\'da\'c3\'bc\'b8\'a6
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'cc
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2  tokenizer
+\f1 \'b0\'a1
+\f2  
+\f1 \'ba\'af\'c8\'af\'c7\'d1
+\f2  token id
+\f1 \'b8\'a6
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b9\'c7\'b7\'ce
+\f2 , \'93yes\'94
+\f1 \'bf\'cd
+\f2  \'93no\'94
+\f1 \'b0\'a1
+\f2  
+\f1 \'be\'ee\'b6\'b2
+\f2  token id
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c0\'c0\'b5\'c7\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'d8\'be\'df
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'bd\'c7\'c7\'e0
+\f2  
+\f1 \'bd\'c3\'c0\'db
+\f2  
+\f1 \'bd\'c3
+\f2  "yes", "no", " yes", " no"
+\f1 \'c0\'c7
+\f2  tokenizer id
+\f1 \'b8\'a6
+\f2  
+\f1 \'c3\'e2\'b7\'c2\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  trailing-space prompt
+\f1 \'bf\'cd
+\f2  unspaced yes/no token 
+\f1 \'c1\'b6\'c7\'d5\'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'c0\'fd\'c2\'f7\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'bc\'f8\'c7\'d1
+\f2  
+\f1 \'b5\'f0\'b9\'f6\'b1\'eb\'c0\'cc
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2 , prompt 
+\f1 \'b3\'a1\'c0\'c7
+\f2  
+\f1 \'b0\'f8\'b9\'e9
+\f2  
+\f1 \'c3\'b3\'b8\'ae\'bf\'cd
+\f2  verbalizer token
+\f1 \'c0\'cc
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  label
+\f1 \'b0\'fa
+\f2  
+\f1 \'c0\'cf\'c4\'a1\'c7\'cf\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d1
+\f2  
+\f1 \'b0\'fa\'c1\'a4\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs48 \cf0 6.5 Calibration
+\f1\b0 \'b0\'fa
+\f0\b  Decision Threshold
+\f2\b0\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'cf\'b9\'dd\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'c0\'cc\'c1\'f8
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'c8\'ae\'b7\'fc\'c0\'cc
+\f2  0.5 
+\f1 \'c0\'cc\'bb\'f3\'c0\'cc\'b8\'e9
+\f2  positive class
+\f1 \'b7\'ce
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b0\'e6\'bf\'ec\'b0\'a1
+\f2  
+\f1 \'b8\'b9\'b4\'d9
+\f2 . 
+\f1 \'b1\'d7\'b7\'af\'b3\'aa
+\f2  neural network
+\f1 \'c0\'c7
+\f2  confidence
+\f1 \'b4\'c2
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c1\'a4\'b4\'e4
+\f2  
+\f1 \'b0\'a1\'b4\'c9\'bc\'ba\'b0\'fa
+\f2  
+\f1 \'c7\'d7\'bb\'f3
+\f2  
+\f1 \'c0\'df
+\f2  
+\f1 \'b8\'c2\'c1\'f6
+\f2  
+\f1 \'be\'ca\'c0\'bb
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . Calibration 
+\f1 \'bf\'ac\'b1\'b8\'b4\'c2
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'c3\'e2\'b7\'c2\'c7\'d1
+\f2  
+\f1 \'c8\'ae\'b7\'fc\'b0\'fa
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c1\'a4\'b4\'e4\'b7\'fc
+\f2  
+\f1 \'bb\'e7\'c0\'cc\'c0\'c7
+\f2  
+\f1 \'ba\'d2\'c0\'cf\'c4\'a1
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b8\'a6
+\f2  
+\f1 \'b4\'d9\'b7\'e9\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  yes probability
+\f1 \'b0\'a1
+\f2  0.5 
+\f1 \'c0\'cc\'bb\'f3\'c0\'cc\'b8\'e9
+\f2  paraphrase
+\f1 \'b6\'f3\'b0\'ed
+\f2  
+\f1 \'ba\'b8\'b4\'c2
+\f2  
+\f1 \'b1\'e2\'ba\'bb
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'cc
+\f2  
+\f1 \'c7\'d7\'bb\'f3
+\f2  
+\f1 \'c3\'d6\'c0\'fb\'c0\'cc\'b6\'f3\'b0\'ed
+\f2  
+\f1 \'b0\'a1\'c1\'a4\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9
+\f2 . 
+\f1 \'b4\'eb\'bd\'c5
+\f2  dev set
+\f1 \'bf\'a1\'bc\'ad
+\f2  threshold
+\f1 \'b8\'a6
+\f2  
+\f1 \'c5\'bd\'bb\'f6\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'c6\'c7\'c1\'a4
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'bb
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c3\'d6\'c1\'be
+\f2  threshold
+\f1 \'b4\'c2
+\f2  0.56
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'e1\'c1\'a4\'b5\'c7\'be\'fa\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 7. 
+\f1\b0 \'c1\'a6\'be\'c8
+\f0\b  
+\f1\b0 \'b9\'e6\'b9\'fd\'b7\'d0
+\f0\b \
+\pard\pardeftab720\sa106\partightenfactor0
+\cf0 7.1 PART-I: GPT-2 
+\f1\b0 \'b1\'b8\'c7\'f6
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'b5\'c8
+\f2  starter code
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b4\'a9\'b6\'f4\'b5\'c8
+\f2  GPT-2 
+\f1 \'b1\'b8\'bc\'ba
+\f2  
+\f1 \'bf\'e4\'bc\'d2\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b1\'b8\'c7\'f6
+\f2  
+\f1 \'b4\'eb\'bb\'f3\'c0\'ba
+\f2  optimizer.py, modules/attention.py, modules/gpt2_layer.py, models/gpt2.py, classifier.py
+\f1 \'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 optimizer.py
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  AdamW optimizer
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . AdamW
+\f1 \'b4\'c2
+\f2  weight decay
+\f1 \'b8\'a6
+\f2  gradient update
+\f1 \'bf\'cd
+\f2  
+\f1 \'ba\'d0\'b8\'ae\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c6\'c4\'b6\'f3\'b9\'cc\'c5\'cd\'bf\'a1
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'d1\'b4\'d9
+\f2 . Adam 
+\f1 \'b0\'e8\'bf\'ad
+\f2  optimizer
+\f1 \'bf\'a1\'bc\'ad
+\f2  L2 
+\f1 \'c1\'a4\'b1\'d4\'c8\'ad\'bf\'cd
+\f2  weight decay
+\f1 \'b0\'a1
+\f2  
+\f1 \'b5\'bf\'c0\'cf\'c7\'cf\'b0\'d4
+\f2  
+\f1 \'c0\'db\'b5\'bf\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'c0\'bb
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'b8\'b9\'c7\'b7\'ce
+\f2 , weight decay
+\f1 \'b8\'a6
+\f2  
+\f1 \'ba\'b0\'b5\'b5\'b7\'ce
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'cc
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'c7\'cf\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  moment update
+\f1 \'bf\'cd
+\f2  parameter update
+\f1 \'b8\'a6
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'d1
+\f2  
+\f1 \'b5\'da
+\f2  weight decay
+\f1 \'b8\'a6
+\f2  
+\f1 \'ba\'d0\'b8\'ae\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 modules/attention.py
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  causal self-attention
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . GPT-2
+\f1 \'b4\'c2
+\f2  decoder-only language model
+\f1 \'c0\'cc\'b9\'c7\'b7\'ce
+\f2  
+\f1 \'b0\'a2
+\f2  token
+\f1 \'c0\'ba
+\f2  
+\f1 \'c0\'da\'bd\'c5\'ba\'b8\'b4\'d9
+\f2  
+\f1 \'b5\'da\'bf\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'c2
+\f2  token
+\f1 \'c0\'bb
+\f2  
+\f1 \'c2\'fc\'c1\'b6\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'be\'f8\'be\'ee\'be\'df
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  attention score
+\f1 \'bf\'a1
+\f2  causal mask
+\f1 \'b8\'a6
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Padding mask
+\f1 \'b8\'b8\'c0\'b8\'b7\'ce\'b4\'c2
+\f2  
+\f1 \'b9\'cc\'b7\'a1
+\f2  token 
+\f1 \'c2\'fc\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'b8\'b7\'c0\'bb
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'be\'f8\'b1\'e2
+\f2  
+\f1 \'b6\'a7\'b9\'ae\'bf\'a1
+\f2 , attention 
+\f1 \'c7\'d4\'bc\'f6
+\f2  
+\f1 \'b3\'bb\'ba\'ce\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c7\'cf\'bb\'ef\'b0\'a2
+\f2  
+\f1 \'c7\'fc\'c5\'c2\'c0\'c7
+\f2  causal mask
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b9\'cc\'b7\'a1
+\f2  
+\f1 \'c0\'a7\'c4\'a1\'c0\'c7
+\f2  attention score
+\f1 \'b8\'a6
+\f2  
+\f1 \'c5\'ab
+\f2  
+\f1 \'c0\'bd\'bc\'f6\'b7\'ce
+\f2  
+\f1 \'b8\'b6\'bd\'ba\'c5\'b7\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 modules/gpt2_layer.py
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  GPT-2 block
+\f1 \'c0\'c7
+\f2  Pre-LayerNorm 
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . GPT-2
+\f1 \'b4\'c2
+\f2  attention block
+\f1 \'b0\'fa
+\f2  feed-forward block 
+\f1 \'c0\'cc\'c0\'fc\'bf\'a1
+\f2  LayerNorm
+\f1 \'c0\'bb
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'b0\'a2
+\f2  block
+\f1 \'c0\'c7
+\f2  
+\f1 \'c3\'e2\'b7\'c2\'c0\'ba
+\f2  dropout
+\f1 \'c0\'bb
+\f2  
+\f1 \'b0\'c5\'c4\'a3
+\f2  
+\f1 \'b5\'da
+\f2  residual connection
+\f1 \'c0\'bb
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'bf\'f8\'b7\'a1
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'b0\'fa
+\f2  
+\f1 \'b4\'f5\'c7\'d8\'c1\'f8\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b4\'c2
+\f2  
+\f1 \'b1\'ed\'c0\'ba
+\f2  Transformer block
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'be\'c8\'c1\'a4\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b3\'f4\'c0\'cc\'b4\'c2
+\f2  
+\f1 \'bf\'aa\'c7\'d2\'c0\'bb
+\f2  
+\f1 \'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 models/gpt2.py
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  token embedding
+\f1 \'b0\'fa
+\f2  positional embedding
+\f1 \'c0\'bb
+\f2  
+\f1 \'c7\'d5\'bb\'ea\'c7\'cf\'b4\'c2
+\f2  embed() 
+\f1 \'c7\'d4\'bc\'f6\'bf\'cd
+\f2 , hidden state
+\f1 \'b8\'a6
+\f2  vocabulary logit
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'ba\'af\'c8\'af\'c7\'cf\'b4\'c2
+\f2  hidden_state_to_token() 
+\f1 \'c7\'d4\'bc\'f6\'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c8\'c4\'c0\'da\'b4\'c2
+\f2  input embedding weight
+\f1 \'b8\'a6
+\f2  output projection
+\f1 \'bf\'a1
+\f2  
+\f1 \'c0\'e7\'bb\'e7\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  weight tying 
+\f1 \'b9\'e6\'bd\'c4\'c0\'bb
+\f2  
+\f1 \'b5\'fb\'b8\'a5\'b4\'d9
+\f2 . Weight tying
+\f1 \'c0\'ba
+\f2  
+\f1 \'c0\'d4\'b7\'c2
+\f2  embedding
+\f1 \'b0\'fa
+\f2  
+\f1 \'c3\'e2\'b7\'c2
+\f2  token prediction head
+\f1 \'b0\'a1
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  token space
+\f1 \'b8\'a6
+\f2  
+\f1 \'b0\'f8\'c0\'af\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'c7\'cf\'bf\'a9
+\f2  language modeling 
+\f1 \'b1\'b8\'c1\'b6\'bf\'cd
+\f2  
+\f1 \'c0\'cf\'b0\'fc\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'c0\'af\'c1\'f6\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 classifier.py
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  GPT2SentimentClassifier
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'bb
+\f2  GPT-2
+\f1 \'bf\'a1
+\f2  
+\f1 \'c5\'eb\'b0\'fa\'bd\'c3\'c5\'b2
+\f2  
+\f1 \'b5\'da
+\f2  
+\f1 \'b8\'b6\'c1\'f6\'b8\'b7
+\f2  non-padding token
+\f1 \'c0\'c7
+\f2  hidden state
+\f1 \'b8\'a6
+\f2  
+\f1 \'c3\'df\'c3\'e2\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'c0\'cc\'b8\'a6
+\f2  dropout
+\f1 \'b0\'fa
+\f2  linear classification head
+\f1 \'bf\'a1
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  label
+\f1 \'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'b9\'ae\'b8\'c6
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'bb
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'ba\'d0\'b7\'f9
+\f2  
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c8\'b0\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs48 \cf0 7.2 PART-II: Cloze-style Paraphrase Detection
+\fs36 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs24 \cf0 \
+\
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 PART-II
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  Paraphrase Detection
+\f1 \'c0\'bb
+\f2  Cloze-style yes/no prediction 
+\f1 \'b9\'ae\'c1\'a6\'b7\'ce
+\f2  
+\f1 \'b1\'b8\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'d4\'b7\'c2\'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'cc\'b7\'e7\'be\'ee\'c1\'f8\'b4\'d9
+\f2 . 
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'bb
+\f2  prompt 
+\f1 \'c7\'fc\'c5\'c2\'b7\'ce
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'b9\'de\'b0\'ed
+\f2 , prompt 
+\f1 \'b8\'b6\'c1\'f6\'b8\'b7
+\f2  
+\f1 \'c0\'a7\'c4\'a1\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  token
+\f1 \'c0\'b8\'b7\'ce
+\f2  \'93yes\'94 
+\f1 \'b6\'c7\'b4\'c2
+\f2  \'93no\'94
+\f1 \'b8\'a6
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'d1\'b4\'d9
+\f2 . label 1
+\f1 \'c0\'ba
+\f2  \'93yes\'94, label 0
+\f1 \'c0\'ba
+\f2  \'93no\'94
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c0\'c0\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'b4\'d9\'c0\'bd
+\f2  
+\f1 \'c0\'fd\'c2\'f7\'b7\'ce
+\f2  
+\f1 \'b5\'bf\'c0\'db\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'b8\'d5\'c0\'fa
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'bb
+\f2  prompt template
+\f1 \'bf\'a1
+\f2  
+\f1 \'b8\'c2\'c3\'e7
+\f2  
+\f1 \'c7\'cf\'b3\'aa\'c0\'c7
+\f2  
+\f1 \'b9\'ae\'c0\'da\'bf\'ad\'b7\'ce
+\f2  
+\f1 \'ba\'af\'c8\'af\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  GPT-2
+\f1 \'b0\'a1
+\f2  
+\f1 \'c0\'cc
+\f2  prompt
+\f1 \'b8\'a6
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'b9\'de\'be\'c6
+\f2  
+\f1 \'b8\'b6\'c1\'f6\'b8\'b7
+\f2  hidden state
+\f1 \'b8\'a6
+\f2  
+\f1 \'c3\'e2\'b7\'c2\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  hidden state
+\f1 \'b8\'a6
+\f2  vocabulary logit
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'ba\'af\'c8\'af\'c7\'d1
+\f2  
+\f1 \'b5\'da
+\f2 , \'93yes\'94
+\f1 \'bf\'cd
+\f2  \'93no\'94 token
+\f1 \'bf\'a1
+\f2  
+\f1 \'c7\'d8\'b4\'e7\'c7\'cf\'b4\'c2
+\f2  logit
+\f1 \'b8\'b8
+\f2  
+\f1 \'c3\'df\'c3\'e2\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'b5\'ce
+\f2  logit
+\f1 \'c0\'bb
+\f2  softmax
+\f1 \'c7\'cf\'bf\'a9
+\f2  yes probability
+\f1 \'b8\'a6
+\f2  
+\f1 \'b0\'e8\'bb\'ea\'c7\'cf\'b0\'ed
+\f2 , threshold
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  label
+\f1 \'c0\'bb
+\f2  
+\f1 \'b0\'e1\'c1\'a4\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'c0\'c7
+\f2  
+\f1 \'b0\'b3\'bc\'b1
+\f2  
+\f1 \'b9\'e6\'b9\'fd\'c0\'ba
+\f2  
+\f1 \'bc\'bc
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  
+\f1 \'b0\'a1\'bc\'b3\'bf\'a1
+\f2  
+\f1 \'b1\'e2\'b9\'dd\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 H1. Prompt 
+\f1\b0 \'c7\'fc\'bd\'c4\'c0\'ba
+\f0\b  GPT-2
+\f1\b0 \'c0\'c7
+\f0\b  yes/no 
+\f1\b0 \'bf\'b9\'c3\'f8
+\f0\b  
+\f1\b0 \'be\'c8\'c1\'a4\'bc\'ba\'bf\'a1
+\f0\b  
+\f1\b0 \'bf\'b5\'c7\'e2\'c0\'bb
+\f0\b  
+\f1\b0 \'c1\'d8\'b4\'d9
+\f0\b .\uc0\u8232 
+\f2\b0  GPT-2
+\f1 \'b4\'c2
+\f2  prompt
+\f1 \'c0\'c7
+\f2  
+\f1 \'c7\'a5\'b8\'e9\'c0\'fb
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'b0\'fa
+\f2  
+\f1 \'b9\'ae\'b8\'c6
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'bf\'a1
+\f2  
+\f1 \'b9\'ce\'b0\'a8\'c7\'cf\'b4\'d9
+\f2 . 
+\f1 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bd\'d6\'c0\'cc\'b6\'f3\'b5\'b5
+\f2  
+\f1 \'be\'ee\'b6\'b2
+\f2  
+\f1 \'c1\'fa\'b9\'ae
+\f2  
+\f1 \'c7\'fc\'bd\'c4\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c1\'a6\'bd\'c3\'c7\'cf\'b4\'c2\'c1\'f6\'bf\'a1
+\f2  
+\f1 \'b5\'fb\'b6\'f3
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'c7
+\f2  yes/no 
+\f1 \'bf\'b9\'c3\'f8\'c0\'cc
+\f2  
+\f1 \'b4\'de\'b6\'f3\'c1\'fa
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  baseline, direct, meaning 
+\f1 \'bc\'bc
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  prompt template
+\f1 \'c0\'bb
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\f0\b\fs26\fsmilli13333 H2. Paraphrase 
+\f1\b0 \'b0\'fc\'b0\'e8\'c0\'c7
+\f0\b  
+\f1\b0 \'b4\'eb\'c4\'aa\'bc\'ba\'c0\'bb
+\f0\b  
+\f1\b0 \'b9\'dd\'bf\'b5\'c7\'cf\'b8\'e9
+\f0\b  decoder-only 
+\f1\b0 \'b8\'f0\'b5\'a8\'c0\'c7
+\f0\b  
+\f1\b0 \'c0\'d4\'b7\'c2
+\f0\b  
+\f1\b0 \'bc\'f8\'bc\'ad
+\f0\b  
+\f1\b0 \'c6\'ed\'c7\'e2\'c0\'bb
+\f0\b  
+\f1\b0 \'c1\'d9\'c0\'cf
+\f0\b  
+\f1\b0 \'bc\'f6
+\f0\b  
+\f1\b0 \'c0\'d6\'b4\'d9
+\f0\b .\uc0\u8232 
+\f2\b0  Paraphrase 
+\f1 \'b0\'fc\'b0\'e8\'b4\'c2
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b4\'eb\'c4\'aa\'c0\'fb\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'b1\'d7\'b7\'af\'b3\'aa
+\f2  GPT-2
+\f1 \'b4\'c2
+\f2  
+\f1 \'bf\'de\'c2\'ca\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bf\'c0\'b8\'a5\'c2\'ca\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'d4\'b7\'c2\'c0\'bb
+\f2  
+\f1 \'c3\'b3\'b8\'ae\'c7\'cf\'b9\'c7\'b7\'ce
+\f2  (q1, q2)
+\f1 \'bf\'cd
+\f2  (q2, q1)
+\f1 \'c0\'c7
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c0\'cc
+\f2  
+\f1 \'b4\'d9\'b8\'a6
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'ba\'b8\'bf\'cf\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  bidirectional inference
+\f1 \'b8\'a6
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\f0\b\fs26\fsmilli13333 H3. Dev set 
+\f1\b0 \'b1\'e2\'b9\'dd
+\f0\b  threshold calibration
+\f1\b0 \'c0\'ba
+\f0\b  0.5 
+\f1\b0 \'b0\'ed\'c1\'a4
+\f0\b  
+\f1\b0 \'b1\'e2\'c1\'d8\'ba\'b8\'b4\'d9
+\f0\b  
+\f1\b0 \'b4\'f5
+\f0\b  
+\f1\b0 \'c0\'fb\'c0\'fd\'c7\'d1
+\f0\b  decision boundary
+\f1\b0 \'b8\'a6
+\f0\b  
+\f1\b0 \'c1\'a6\'b0\'f8\'c7\'d2
+\f0\b  
+\f1\b0 \'bc\'f6
+\f0\b  
+\f1\b0 \'c0\'d6\'b4\'d9
+\f0\b .\uc0\u8232 
+\f2\b0  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'c3\'e2\'b7\'c2\'c7\'d1
+\f2  yes probability
+\f1 \'b0\'a1
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c1\'a4\'b4\'e4
+\f2  
+\f1 \'b0\'a1\'b4\'c9\'bc\'ba\'b0\'fa
+\f2  
+\f1 \'bf\'cf\'c0\'fc\'c8\'f7
+\f2  
+\f1 \'c0\'cf\'c4\'a1\'c7\'d1\'b4\'d9\'b0\'ed
+\f2  
+\f1 \'ba\'b8\'c0\'e5\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'be\'f8\'b4\'d9
+\f2 . 
+\f1 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'b1\'e2\'ba\'bb
+\f2  threshold 0.5 
+\f1 \'b4\'eb\'bd\'c5
+\f2  dev set
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c3\'d6\'c0\'fb
+\f2  threshold
+\f1 \'b8\'a6
+\f2  
+\f1 \'c5\'bd\'bb\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 7.3 Bidirectional Inference
+\f1\b0 \'bf\'cd
+\f0\b  Threshold Calibration
+\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 Bidirectional inference
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'c7
+\f2  
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'bc\'f8\'bc\'ad\'b8\'a6
+\f2  
+\f1 \'b9\'d9\'b2\'d9\'be\'ee
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'f8
+\f2  
+\f1 \'c3\'df\'b7\'d0\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'b8\'d5\'c0\'fa
+\f2  (q1, q2) 
+\f1 \'b9\'e6\'c7\'e2\'bf\'a1\'bc\'ad
+\f2  yes probability
+\f1 \'b8\'a6
+\f2  
+\f1 \'b0\'e8\'bb\'ea\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'b4\'d9\'bd\'c3
+\f2  (q2, q1) 
+\f1 \'b9\'e6\'c7\'e2\'bf\'a1\'bc\'ad
+\f2  yes probability
+\f1 \'b8\'a6
+\f2  
+\f1 \'b0\'e8\'bb\'ea\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c3\'d6\'c1\'be
+\f2  score
+\f1 \'b4\'c2
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c8\'ae\'b7\'fc\'c0\'c7
+\f2  
+\f1 \'c6\'f2\'b1\'d5\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c1\'a4\'c0\'c7\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\f1 \'c3\'d6\'c1\'be
+\f2  label
+\f1 \'c0\'ba
+\f2  dev set
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c7\'d1
+\f2  threshold 0.56
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'e1\'c1\'a4\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 p_final = \{ p_yes(q
+\f3 \uc0\u8321 
+\f2 , q
+\f3 \uc0\u8322 
+\f2 ) + p_yes(q
+\f3 \uc0\u8322 
+\f2 , q
+\f3 \uc0\u8321 
+\f2 ) \} / 2
+\fs24 \
+
+\fs26\fsmilli13333 \uc0\u375  = 1, if p_final \u8805  0.56
+\fs24 \
+
+\fs26\fsmilli13333 \uc0\u375  = 0, otherwise
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'cc
+\f2  
+\f1 \'b9\'e6\'b9\'fd\'c0\'ba
+\f2  
+\f1 \'b8\'f0\'b5\'a8
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'c5\'a9\'b0\'d4
+\f2  
+\f1 \'ba\'af\'b0\'e6\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'c0\'b8\'b8\'e9\'bc\'ad\'b5\'b5
+\f2  prompt 
+\f1 \'c7\'fc\'bd\'c4
+\f2 , 
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'bc\'f8\'bc\'ad
+\f2  
+\f1 \'b4\'eb\'c4\'aa\'bc\'ba
+\f2 , 
+\f1 \'c6\'c7\'c1\'a4
+\f2  threshold
+\f1 \'b8\'a6
+\f2  
+\f1 \'c1\'b6\'c1\'a4\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f0\b\fs48 \cf0 8. 
+\f1\b0 \'bd\'c7\'c7\'e8
+\f0\b \
+\pard\pardeftab720\sa106\partightenfactor0
+\cf0 8.1 
+\f1\b0 \'b5\'a5\'c0\'cc\'c5\'cd
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  SST
+\f1 \'bf\'cd
+\f2  CFIMDB 
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . SST
+\f1 \'b4\'c2
+\f2  
+\f1 \'bf\'b5\'c8\'ad
+\f2  
+\f1 \'b8\'ae\'ba\'e4
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d8
+\f2  
+\f1 \'b4\'d9\'bc\'b8
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  label
+\f1 \'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'c0\'cc\'b8\'e7
+\f2 , CFIMDB
+\f1 \'b4\'c2
+\f2  
+\f1 \'bf\'b5\'c8\'ad
+\f2  
+\f1 \'b8\'ae\'ba\'e4\'c0\'c7
+\f2  
+\f1 \'b1\'e0\'c1\'a4
+\f2 /
+\f1 \'ba\'ce\'c1\'a4\'c0\'bb
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'c0\'cc\'c1\'f8
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 PART-II
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  Quora Question Pairs 
+\f1 \'b1\'e2\'b9\'dd
+\f2  Paraphrase Detection 
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b0\'a2
+\f2  example
+\f1 \'c0\'ba
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'b0\'fa
+\f2  paraphrase 
+\f1 \'bf\'a9\'ba\'ce
+\f2  label
+\f1 \'b7\'ce
+\f2  
+\f1 \'b1\'b8\'bc\'ba\'b5\'c8\'b4\'d9
+\f2 . 
+\f1 \'c7\'d0\'bd\'c0\'b0\'fa
+\f2  
+\f1 \'b8\'f0\'b5\'a8
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'bf\'a1\'b4\'c2
+\f2  train set
+\f1 \'b0\'fa
+\f2  dev set
+\f1 \'b8\'b8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Test set
+\f1 \'c0\'ba
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  prediction 
+\f1 \'c6\'c4\'c0\'cf
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'bf\'a1\'b8\'b8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'c0\'b8\'b8\'e7
+\f2 , test label
+\f1 \'c0\'ba
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  test set
+\f1 \'c0\'bb
+\f2  
+\f1 \'b0\'b3\'b9\'df
+\f2  
+\f1 \'b0\'fa\'c1\'a4\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d1
+\f2  
+\f1 \'c1\'b6\'c4\'a1\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.2 
+\f1\b0 \'c6\'f2\'b0\'a1
+\f0\b  
+\f1\b0 \'b9\'e6\'b9\'fd
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 PART-I 
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  dev accuracy
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . PART-II Paraphrase Detection
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  accuracy
+\f1 \'bf\'cd
+\f2  F1 score
+\f1 \'b8\'a6
+\f2  
+\f1 \'c7\'d4\'b2\'b2
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Accuracy
+\f1 \'b4\'c2
+\f2  
+\f1 \'c0\'fc\'c3\'bc
+\f2  
+\f1 \'bf\'b9\'c3\'f8
+\f2  
+\f1 \'c1\'df
+\f2  
+\f1 \'c1\'a4\'b4\'e4
+\f2  
+\f1 \'ba\'f1\'c0\'b2\'c0\'bb
+\f2  
+\f1 \'b3\'aa\'c5\'b8\'b3\'bb\'b8\'e7
+\f2 , F1 score
+\f1 \'b4\'c2
+\f2  paraphrase class
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  precision
+\f1 \'b0\'fa
+\f2  recall
+\f1 \'c0\'c7
+\f2  
+\f1 \'b1\'d5\'c7\'fc\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'c3\'d6\'c1\'be
+\f2  test set
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d8\'bc\'ad\'b4\'c2
+\f2  label
+\f1 \'c0\'cc
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'b5\'c7\'c1\'f6
+\f2  
+\f1 \'be\'ca\'c0\'b8\'b9\'c7\'b7\'ce
+\f2  test accuracy
+\f1 \'b3\'aa
+\f2  test F1
+\f1 \'c0\'ba
+\f2  
+\f1 \'b0\'e8\'bb\'ea\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9
+\f2 . 
+\f1 \'b4\'eb\'bd\'c5
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'b7\'ce
+\f2  test prediction file
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.3 
+\f1\b0 \'bd\'c7\'c7\'e8
+\f0\b  
+\f1\b0 \'c8\'af\'b0\'e6
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\b0\fs26\fsmilli13333 \cf0 \'ba\'bb
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c0\'ba
+\f2  Google Cloud Platform
+\f1 \'c0\'c7
+\f2  Compute Engine 
+\f1 \'c8\'af\'b0\'e6\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . GPU
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'b4\'c2
+\f2  PART-II 
+\f1 \'c0\'fc\'c3\'bc
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b9\'d7
+\f2  
+\f1 \'c6\'f2\'b0\'a1
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c0\'ba
+\f2  NVIDIA Tesla T4 GPU 1
+\f1 \'b0\'b3\'b0\'a1
+\f2  
+\f1 \'c0\'e5\'c2\'f8\'b5\'c8
+\f2  VM
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'f8\'c7\'e0\'c7\'cf\'bf\'b4\'c0\'b8\'b8\'e7
+\f2 , VM
+\f1 \'c0\'c7
+\f2  
+\f1 \'b8\'d3\'bd\'c5
+\f2  
+\f1 \'c5\'b8\'c0\'d4\'c0\'ba
+\f2  n1-standard-2
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'bf\'ee\'bf\'b5\'c3\'bc\'c1\'a6\'b4\'c2
+\f2  Debian 12 
+\f1 \'b0\'e8\'bf\'ad
+\f2  
+\f1 \'c8\'af\'b0\'e6\'c0\'cc\'be\'fa\'b0\'ed
+\f2 , 
+\f1 \'bd\'c7\'c7\'e8\'bf\'a1
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'c7\'d1
+\f2  Python 
+\f1 \'c6\'d0\'c5\'b0\'c1\'f6\'b4\'c2
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'b5\'c8
+\f2  env.yml 
+\f1 \'c6\'c4\'c0\'cf\'c0\'bb
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  Conda 
+\f1 \'c8\'af\'b0\'e6
+\f2  nlp_final
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b0\'fc\'b8\'ae\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'bd\'c7\'c7\'e0
+\f2  
+\f1 \'c8\'af\'b0\'e6\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  Python 3.8.20, PyTorch 2.4.1+cu121
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , torch.cuda.is_available()
+\f1 \'b8\'a6
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  CUDA 
+\f1 \'bb\'e7\'bf\'eb
+\f2  
+\f1 \'b0\'a1\'b4\'c9
+\f2  
+\f1 \'bf\'a9\'ba\'ce\'bf\'cd
+\f2  GPU 
+\f1 \'c0\'e5\'c4\'a1\'b0\'a1
+\f2  
+\f1 \'c1\'a4\'bb\'f3\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'ce\'bd\'c4\'b5\'c7\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 PART-II Paraphrase Detection 
+\f1 \'bd\'c7\'c7\'e8\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  GPT-2 
+\f1 \'b8\'f0\'b5\'a8\'c0\'bb
+\f2  
+\f1 \'b1\'e2\'b9\'dd\'c0\'b8\'b7\'ce
+\f2  Quora Question Pairs 
+\f1 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2\'c0\'bb
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c1\'d6\'bf\'e4
+\f2  
+\f1 \'c7\'cf\'c0\'cc\'c6\'db\'c6\'c4\'b6\'f3\'b9\'cc\'c5\'cd\'b4\'c2
+\f2  learning rate 1e-5, batch size 4, gradient accumulation steps 2, epoch 3, max length 128
+\f1 \'b7\'ce
+\f2  
+\f1 \'bc\'b3\'c1\'a4\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Prompt screening 
+\f1 \'b4\'dc\'b0\'e8\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'ba\'fc\'b8\'a5
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'b8\'a6
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  train 5,000
+\f1 \'b0\'b3\'bf\'cd
+\f2  dev 1,000
+\f1 \'b0\'b3\'b8\'b8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , 
+\f1 \'c3\'d6\'c1\'be
+\f2  full training 
+\f1 \'b4\'dc\'b0\'e8\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'c0\'fc\'c3\'bc
+\f2  train set
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  checkpoint
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'a9
+\f2  bidirectional inference
+\f1 \'bf\'cd
+\f2  threshold calibration
+\f1 \'c0\'bb
+\f2  dev set
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'b4\'c0\'b8\'b8\'e7
+\f2 , 
+\f1 \'c3\'d6\'c1\'be
+\f2  test set
+\f1 \'c0\'ba
+\f2  
+\f1 \'b8\'f0\'b5\'a8
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'b0\'fa
+\f2  threshold 
+\f1 \'c1\'b6\'c1\'a4\'c0\'cc
+\f2  
+\f1 \'b3\'a1\'b3\'ad
+\f2  
+\f1 \'b5\'da
+\f2  prediction 
+\f1 \'c6\'c4\'c0\'cf
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'bf\'a1\'b8\'b8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.4 PART-I 
+\f1\b0 \'bd\'c7\'c7\'e8
+\f0\b  
+\f1\b0 \'b0\'e1\'b0\'fa
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  last-linear-layer 
+\f1 \'b9\'e6\'bd\'c4\'b0\'fa
+\f2  full-model fine-tuning 
+\f1 \'b9\'e6\'bd\'c4\'c0\'bb
+\f2  SST
+\f1 \'bf\'cd
+\f2  CFIMDB
+\f1 \'bf\'a1
+\f2  
+\f1 \'b0\'a2\'b0\'a2
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Fine-tuning 
+\f1\b0 \'b9\'e6\'bd\'c4
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'b5\'a5\'c0\'cc\'c5\'cd\'bc\'c2
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev Accuracy
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'b1\'e2\'c1\'d8
+\f0\b  
+\f1\b0 \'bc\'ba\'b4\'c9
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 last-linear-layer
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 SST
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.453
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.462
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 last-linear-layer
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 CFIMDB
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.878
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.861
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 full-model
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 SST
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.518
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.513
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 full-model
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 CFIMDB
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.980
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.976
+\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 CFIMDB
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  last-linear-layer
+\f1 \'bf\'cd
+\f2  full-model 
+\f1 \'b9\'e6\'bd\'c4
+\f2  
+\f1 \'b8\'f0\'b5\'ce
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'c3\'ca\'b0\'fa\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . SST full-model 
+\f1 \'bf\'aa\'bd\'c3
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'c3\'ca\'b0\'fa\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . SST last-linear-layer
+\f1 \'b4\'c2
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'be\'e0\'b0\'a3
+\f2  
+\f1 \'b9\'cc\'b4\'de\'c7\'df\'c1\'f6\'b8\'b8
+\f2 , 
+\f1 \'b1\'e2\'c1\'d8\'c4\'a1\'bf\'a1
+\f2  
+\f1 \'b1\'d9\'c1\'a2\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'fc\'c3\'bc\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'d1
+\f2  GPT-2 
+\f1 \'b1\'b8\'c1\'b6\'bf\'cd
+\f2  classifier
+\f1 \'b0\'a1
+\f2  
+\f1 \'c1\'a4\'bb\'f3\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'db\'b5\'bf\'c7\'d4\'c0\'bb
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'be\'fa\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 Full-model fine-tuning
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'b7\'fc
+\f2  
+\f1 \'bc\'b3\'c1\'a4\'c0\'cc
+\f2  
+\f1 \'c1\'df\'bf\'e4\'c7\'d1
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'c1\'d6\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c3\'ca\'b1\'e2
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'b7\'fc
+\f2  1e-3
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'d2
+\f2  
+\f1 \'b0\'e6\'bf\'ec
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b0\'a1\'c1\'df\'c4\'a1\'b0\'a1
+\f2  
+\f1 \'ba\'fc\'b8\'a3\'b0\'d4
+\f2  
+\f1 \'bc\'d5\'bb\'f3\'b5\'c7\'be\'ee
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'cc
+\f2  
+\f1 \'c5\'a9\'b0\'d4
+\f2  
+\f1 \'c0\'fa\'c7\'cf\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'b7\'fc\'c0\'bb
+\f2  1e-5
+\f1 \'b7\'ce
+\f2  
+\f1 \'b3\'b7\'c3\'df\'be\'fa\'b0\'ed
+\f2 , 
+\f1 \'bc\'ba\'b4\'c9\'c0\'cc
+\f2  
+\f1 \'be\'c8\'c1\'a4\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  pretrained language model fine-tuning
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c0\'db\'c0\'ba
+\f2  
+\f1 \'c7\'d0\'bd\'c0\'b7\'fc\'c0\'cc
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'c7\'cf\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'c0\'cf\'b9\'dd\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'b0\'e6\'c7\'e8\'b0\'fa
+\f2  
+\f1 \'c0\'cf\'c4\'a1\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.5 PART-II Prompt Template 
+\f1\b0 \'ba\'f1\'b1\'b3
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\b0\fs26\fsmilli13333 \cf0 \'b8\'d5\'c0\'fa
+\f2  baseline, direct, meaning 
+\f1 \'bc\'bc
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  prompt template
+\f1 \'c0\'bb
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc
+\f2  
+\f1 \'b4\'dc\'b0\'e8\'b4\'c2
+\f2  
+\f1 \'c0\'fc\'c3\'bc
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'c0\'fc\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'c0\'fd\'c7\'d1
+\f2  prompt
+\f1 \'b8\'a6
+\f2  
+\f1 \'bc\'b1\'c5\'c3\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d1
+\f2  screening 
+\f1 \'bd\'c7\'c7\'e8\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'ba\'fc\'b8\'a5
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'b8\'a6
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  train 5,000
+\f1 \'b0\'b3\'bf\'cd
+\f2  dev 1,000
+\f1 \'b0\'b3\'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1863\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Prompt
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev Accuracy
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev F1
+\f2\b0\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1863\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 baseline
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.708
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.613
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1863\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 direct
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.747
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.721
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1863\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.676
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.525
+\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 direct prompt
+\f1 \'b0\'a1
+\f2  accuracy
+\f1 \'bf\'cd
+\f2  F1 
+\f1 \'b8\'f0\'b5\'ce\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b0\'a1\'c0\'e5
+\f2  
+\f1 \'b3\'f4\'c0\'ba
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  paraphrase 
+\f1 \'bf\'a9\'ba\'ce\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b9\'af\'b4\'c2
+\f2  prompt
+\f1 \'b0\'a1
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  yes/no token prediction
+\f1 \'bf\'a1
+\f2  
+\f1 \'b0\'a1\'c0\'e5
+\f2  
+\f1 \'b8\'ed\'c8\'ae\'c7\'d1
+\f2  
+\f1 \'c1\'b6\'b0\'c7\'c0\'bb
+\f2  
+\f1 \'c1\'a6\'b0\'f8\'c7\'df\'b1\'e2
+\f2  
+\f1 \'b6\'a7\'b9\'ae\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c7\'d8\'bc\'ae\'b5\'c8\'b4\'d9
+\f2 . 
+\f1 \'b9\'dd\'b8\'e9
+\f2  meaning prompt
+\f1 \'b4\'c2
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'b5\'bf\'b5\'ee\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b9\'af\'b4\'c2
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'cc\'c1\'f6\'b8\'b8
+\f2 , 
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'b0\'e1\'b0\'fa\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'b0\'a1\'c0\'e5
+\f2  
+\f1 \'b3\'b7\'c0\'ba
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c3\'df\'bb\'f3\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'cc
+\f2  
+\f1 \'c7\'d7\'bb\'f3
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c1\'c1\'c0\'ba
+\f2  prompt
+\f1 \'b0\'a1
+\f2  
+\f1 \'b5\'c7\'b4\'c2
+\f2  
+\f1 \'b0\'cd\'c0\'ba
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b8\'e7
+\f2 , label word
+\f1 \'b0\'a1
+\f2  
+\f1 \'c0\'da\'bf\'ac\'bd\'ba\'b7\'b4\'b0\'d4
+\f2  
+\f1 \'c0\'cc\'be\'ee\'c1\'f6\'b4\'c2
+\f2  
+\f1 \'b9\'ae\'c0\'e5
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b0\'a1
+\f2  prompt-based classification
+\f1 \'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'df\'bf\'e4\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'c0\'cc\'c8\'c4
+\f2  full training
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  direct prompt
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.6 PART-II Full Training 
+\f1\b0 \'b0\'e1\'b0\'fa
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 direct prompt
+\f1 \'b8\'a6
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'c0\'fc\'c3\'bc
+\f2  train set
+\f1 \'c0\'b8\'b7\'ce
+\f2  3 epoch 
+\f1 \'c7\'d0\'bd\'c0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Epoch
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Train Loss
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev Accuracy
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev F1
+\f2\b0\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.360
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.870
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.863
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.272
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.884
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.877
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth2903\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 2
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.224
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.887
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.880
+\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Train loss
+\f1 \'b4\'c2
+\f2  
+\f1 \'bc\'bc
+\f2  epoch 
+\f1 \'b5\'bf\'be\'c8
+\f2  
+\f1 \'b2\'d9\'c1\'d8\'c8\'f7
+\f2  
+\f1 \'b0\'a8\'bc\'d2\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . Dev accuracy
+\f1 \'bf\'cd
+\f2  F1
+\f1 \'b5\'b5
+\f2  
+\f1 \'c7\'d4\'b2\'b2
+\f2  
+\f1 \'bb\'f3\'bd\'c2\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  train set
+\f1 \'bf\'a1\'b8\'b8
+\f2  
+\f1 \'b0\'fa\'c0\'fb\'c7\'d5\'b5\'c8
+\f2  
+\f1 \'b0\'cd\'c0\'cc
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2  dev set
+\f1 \'bf\'a1\'bc\'ad\'b5\'b5
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'bd\'d6
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'b0\'fc\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c0\'df
+\f2  
+\f1 \'b1\'b8\'ba\'d0\'c7\'cf\'b0\'d4
+\f2  
+\f1 \'b5\'c7\'be\'fa\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 . 
+\f1 \'b4\'d9\'b8\'b8
+\f2  epoch 1
+\f1 \'bf\'a1\'bc\'ad
+\f2  epoch 2
+\f1 \'b7\'ce
+\f2  
+\f1 \'b0\'a5
+\f2  
+\f1 \'b6\'a7
+\f2  accuracy 
+\f1 \'c7\'e2\'bb\'f3\'c6\'f8\'c0\'ba
+\f2  0.003
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'db\'be\'c6\'c1\'b3\'b4\'d9
+\f2 . 
+\f1 \'b5\'fb\'b6\'f3\'bc\'ad
+\f2  
+\f1 \'c3\'df\'b0\'a1
+\f2  epoch 
+\f1 \'c7\'d0\'bd\'c0\'c0\'c7
+\f2  
+\f1 \'c0\'cc\'b5\'e6\'c0\'ba
+\f2  
+\f1 \'c1\'a6\'c7\'d1\'c0\'fb\'c0\'cf
+\f2  
+\f1 \'b0\'a1\'b4\'c9\'bc\'ba\'c0\'cc
+\f2  
+\f1 \'c0\'d6\'c0\'b8\'b8\'e7
+\f2 , 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'ba\'f1\'bf\'eb\'b0\'fa
+\f2  
+\f1 \'b0\'fa\'c0\'fb\'c7\'d5
+\f2  
+\f1 \'b0\'a1\'b4\'c9\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b0\'ed\'b7\'c1\'c7\'cf\'bf\'a9
+\f2  3 epoch checkpoint
+\f1 \'b8\'a6
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'b7\'ce
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.7 
+\f1\b0 \'b0\'b3\'bc\'b1
+\f0\b  
+\f1\b0 \'b9\'e6\'b9\'fd\'ba\'b0
+\f0\b  Ablation 
+\f1\b0 \'b0\'e1\'b0\'fa
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f2\b0\fs26\fsmilli13333 \cf0 Full training 
+\f1 \'c0\'cc\'c8\'c4
+\f2  bidirectional inference
+\f1 \'bf\'cd
+\f2  threshold calibration
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'f8\'c2\'f7\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth3043\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth3443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'b4\'dc\'b0\'e8
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bc\'b3\'c1\'a4
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev Accuracy
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Dev F1
+\f2\b0\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth3043\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth3443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Full training
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 direct, 
+\f1 \'b4\'dc\'b9\'e6\'c7\'e2
+\f2 , threshold 0.5
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.887
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.880
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth3043\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth3443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Bidirectional inference
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 direct, 
+\f1 \'be\'e7\'b9\'e6\'c7\'e2
+\f2 , threshold 0.5
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.890
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.884
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth3043\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2160
+\clvertalt \clshdrawnil \clwWidth3443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx6480
+\clvertalt \clshdrawnil \clwWidth1703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Threshold calibration
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 direct, 
+\f1 \'be\'e7\'b9\'e6\'c7\'e2
+\f2 , threshold 0.56
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.892
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0.884
+\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Bidirectional inference
+\f1 \'b4\'c2
+\f2  accuracy
+\f1 \'b8\'a6
+\f2  0.887
+\f1 \'bf\'a1\'bc\'ad
+\f2  0.890
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b0\'b3\'bc\'b1\'c6\'f8\'c0\'ba
+\f2  
+\f1 \'c5\'a9\'c1\'f6
+\f2  
+\f1 \'be\'ca\'c1\'f6\'b8\'b8
+\f2 , paraphrase 
+\f1 \'b0\'fc\'b0\'e8\'c0\'c7
+\f2  
+\f1 \'b4\'eb\'c4\'aa\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b9\'dd\'bf\'b5\'c7\'d1
+\f2  
+\f1 \'c3\'df\'b7\'d0
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'cc
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  dev 
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'b1\'e0\'c1\'a4\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c0\'db\'bf\'eb\'c7\'df\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  GPT-2
+\f1 \'b0\'a1
+\f2  decoder-only 
+\f1 \'b1\'b8\'c1\'b6\'b7\'ce
+\f2  
+\f1 \'c0\'ce\'c7\'d8
+\f2  
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'bc\'f8\'bc\'ad\'bf\'a1
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'b9\'de\'c0\'bb
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'b0\'a1\'c1\'a4\'b0\'fa\'b5\'b5
+\f2  
+\f1 \'c0\'cf\'c4\'a1\'c7\'d1\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 Threshold calibration
+\f1 \'c0\'ba
+\f2  accuracy
+\f1 \'b8\'a6
+\f2  
+\f1 \'b4\'d9\'bd\'c3
+\f2  0.892
+\f1 \'b7\'ce
+\f2  
+\f1 \'b3\'f4\'bf\'b4\'b4\'d9
+\f2 . F1
+\f1 \'c0\'ba
+\f2  0.884
+\f1 \'b7\'ce
+\f2  
+\f1 \'c0\'af\'c1\'f6\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  threshold
+\f1 \'b8\'a6
+\f2  0.5
+\f1 \'bf\'a1\'bc\'ad
+\f2  0.56
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b3\'f4\'c0\'cc\'b8\'e9\'bc\'ad
+\f2  
+\f1 \'c0\'cf\'ba\'ce
+\f2  false positive
+\f1 \'b8\'a6
+\f2  
+\f1 \'c1\'d9\'bf\'b4\'c0\'b8\'b3\'aa
+\f2 , paraphrase class
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  F1 
+\f1 \'b1\'d5\'c7\'fc\'c0\'ba
+\f2  
+\f1 \'c5\'a9\'b0\'d4
+\f2  
+\f1 \'bc\'d5\'bb\'f3\'bd\'c3\'c5\'b0\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b7\'ce
+\f2  
+\f1 \'c7\'d8\'bc\'ae\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.8 
+\f1\b0 \'bf\'c0\'b7\'f9
+\f0\b  
+\f1\b0 \'ba\'d0\'bc\'ae
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\b0\fs26\fsmilli13333 \cf0 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'bc\'b3\'c1\'a4\'c0\'ce
+\f2  direct prompt, bidirectional inference, threshold 0.56
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  dev set 
+\f1 \'bf\'c0\'b7\'f9
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'c0\'bb
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'bf\'c0\'b7\'f9
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'c6\'c4\'c0\'cf\'c0\'ba
+\f2  results/error_analysis_para.csv
+\f1 \'b7\'ce
+\f2  
+\f1 \'c0\'fa\'c0\'e5\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'b4\'eb\'bb\'f3\'c0\'ba
+\f2  false positive, false negative, borderline case
+\f1 \'b8\'a6
+\f2  
+\f1 \'c6\'f7\'c7\'d4\'c7\'d1
+\f2  150
+\f1 \'b0\'b3
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'bf\'c0\'b7\'f9
+\f2  
+\f1 \'c0\'af\'c7\'fc\'c0\'ba
+\f2  
+\f1 \'b4\'d9\'c0\'bd\'b0\'fa
+\f2  
+\f1 \'b0\'b0\'c0\'cc
+\f2  
+\f1 \'c1\'a4\'b8\'ae\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bf\'c0\'b7\'f9
+\f0\b  
+\f1\b0 \'c0\'af\'c7\'fc
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bb\'e7\'b7\'ca
+\f0\b  
+\f1\b0 \'bc\'f6
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bc\'b3\'b8\'ed
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 needs_manual_review
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 72
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'da\'b5\'bf
+\f2  
+\f1 \'ba\'d0\'b7\'f9\'b8\'b8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b8\'ed\'c8\'ae\'c7\'d1
+\f2  
+\f1 \'c0\'af\'c7\'fc
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c0\'cc
+\f2  
+\f1 \'be\'ee\'b7\'c1\'bf\'ee
+\f2  
+\f1 \'bb\'e7\'b7\'ca
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 number_or_condition
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 39
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bc\'fd\'c0\'da
+\f2 , 
+\f1 \'c1\'b6\'b0\'c7
+\f2 , 
+\f1 \'bd\'c3\'b0\'a3
+\f2 , 
+\f1 \'b9\'fc\'c0\'a7
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b0\'a1
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b8\'a6
+\f2  
+\f1 \'b9\'d9\'b2\'d9\'b4\'c2
+\f2  
+\f1 \'bb\'e7\'b7\'ca
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 similar_words_different_meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 28
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'b4\'dc\'be\'ee\'b4\'c2
+\f2  
+\f1 \'c0\'af\'bb\'e7\'c7\'cf\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'d9\'b8\'a5
+\f2  
+\f1 \'bb\'e7\'b7\'ca
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 entity_or_name
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 6
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'ce\'b9\'b0
+\f2 , 
+\f1 \'c0\'e5\'bc\'d2
+\f2 , 
+\f1 \'b4\'eb\'bb\'f3
+\f2 , 
+\f1 \'b9\'e6\'c7\'e2\'bc\'ba
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b0\'a1
+\f2  
+\f1 \'c1\'df\'bf\'e4\'c7\'d1
+\f2  
+\f1 \'bb\'e7\'b7\'ca
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth4543\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth883\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth5763\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 different_expression_same_meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 5
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c7\'a5\'c7\'f6\'c0\'ba
+\f2  
+\f1 \'b4\'d9\'b8\'a3\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'c0\'ce
+\f2  
+\f1 \'bb\'e7\'b7\'ca
+\f2\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 False positive
+\f1 \'c0\'c7
+\f2  
+\f1 \'bb\'f3\'b4\'e7\'bc\'f6\'b4\'c2
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'cc
+\f2  
+\f1 \'c7\'a5\'b8\'e9\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'ba\'f1\'bd\'c1\'c7\'d1
+\f2  
+\f1 \'b4\'dc\'be\'ee\'b8\'a6
+\f2  
+\f1 \'b0\'f8\'c0\'af\'c7\'cf\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'d9\'b8\'a5
+\f2  
+\f1 \'b0\'e6\'bf\'ec\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b9\'df\'bb\'fd\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1563\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2343\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'af\'c7\'fc
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Sentence 1
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Sentence 2
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Gold
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Pred
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c7\'d8\'bc\'ae
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1563\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2343\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 similar words, different meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 is (male) circumcision required in islam?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 is circumcision allowed in islam?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 required
+\f1 \'bf\'cd
+\f2  allowed
+\f1 \'b4\'c2
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'d9\'b8\'a3\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'b4\'dc\'be\'ee\'b0\'a1
+\f2  
+\f1 \'b0\'e3\'c3\'c4
+\f2  paraphrase
+\f1 \'b7\'ce
+\f2  
+\f1 \'bf\'c0\'c6\'c7
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1563\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2343\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 similar words, different meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 how do i unsubscribe from quora?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 how do i delete my quora account?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 Quora 
+\f1 \'b0\'e8\'c1\'a4
+\f2  
+\f1 \'b0\'fc\'b7\'c3
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'cc\'c1\'f6\'b8\'b8
+\f2  unsubscribe
+\f1 \'bf\'cd
+\f2  delete
+\f1 \'b4\'c2
+\f2  
+\f1 \'b4\'d9\'b8\'a5
+\f2  
+\f1 \'c7\'e0\'b5\'bf
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1563\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2343\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2703\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 entity or direction reversal
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 what are the things that rest of the world should learn from india?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 what should indians learn from the rest of the world?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 India
+\f1 \'bf\'cd
+\f2  rest of the world
+\f1 \'c0\'c7
+\f2  
+\f1 \'b9\'e6\'c7\'e2\'bc\'ba\'c0\'cc
+\f2  
+\f1 \'b9\'dd\'b4\'eb\'c0\'d3\'bf\'a1\'b5\'b5
+\f2  paraphrase
+\f1 \'b7\'ce
+\f2  
+\f1 \'bf\'b9\'c3\'f8
+\f2\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c3\'b9
+\f2  
+\f1 \'b9\'f8\'c2\'b0
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'bf\'a1\'bc\'ad
+\f2  \'93required\'94
+\f1 \'bf\'cd
+\f2  \'93allowed\'94
+\f1 \'b4\'c2
+\f2  
+\f1 \'b9\'fd\'c0\'fb
+\f2 \'b7
+\f1 \'b1\'d4\'b9\'fc\'c0\'fb
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b4\'d9\'b8\'a3\'b4\'d9
+\f2 . 
+\f1 \'b1\'d7\'b7\'af\'b3\'aa
+\f2  
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'ba
+\f2  \'93circumcision\'94
+\f1 \'b0\'fa
+\f2  \'93islam\'94
+\f1 \'c0\'cc\'b6\'f3\'b4\'c2
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'b4\'dc\'be\'ee\'b8\'a6
+\f2  
+\f1 \'b0\'f8\'c0\'af\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'b6\'a7\'b9\'ae\'bf\'a1
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  paraphrase
+\f1 \'b7\'ce
+\f2  
+\f1 \'c0\'df\'b8\'f8
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b5\'ce
+\f2  
+\f1 \'b9\'f8\'c2\'b0
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b5\'b5
+\f2  
+\f1 \'ba\'f1\'bd\'c1\'c7\'cf\'b4\'d9
+\f2 . \'93unsubscribe from Quora\'94
+\f1 \'bf\'cd
+\f2  \'93delete my Quora account\'94
+\f1 \'b4\'c2
+\f2  
+\f1 \'b8\'f0\'b5\'ce
+\f2  Quora 
+\f1 \'b0\'e8\'c1\'a4\'b0\'fa
+\f2  
+\f1 \'b0\'fc\'b7\'c3\'b5\'c8
+\f2  
+\f1 \'c7\'e0\'b5\'bf\'c0\'cc\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'bd\'c7\'c1\'a6
+\f2  action
+\f1 \'c0\'ba
+\f2  
+\f1 \'b4\'d9\'b8\'a3\'b4\'d9
+\f2 . 
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'b5\'b5\'b8\'de\'c0\'ce\'b0\'fa
+\f2  
+\f1 \'c0\'af\'bb\'e7\'c7\'d1
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'bf\'a1
+\f2  
+\f1 \'bf\'b5\'c7\'e2\'c0\'bb
+\f2  
+\f1 \'b9\'de\'be\'c6
+\f2  false positive
+\f1 \'b8\'a6
+\f2  
+\f1 \'b9\'df\'bb\'fd\'bd\'c3\'c4\'d7\'b4\'d9
+\f2 .
+\fs24 \
+
+\f1\fs26\fsmilli13333 \'bc\'bc
+\f2  
+\f1 \'b9\'f8\'c2\'b0
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'be\'ee
+\f2  
+\f1 \'c1\'fd\'c7\'d5\'c0\'ba
+\f2  
+\f1 \'b0\'c5\'c0\'c7
+\f2  
+\f1 \'c0\'af\'bb\'e7\'c7\'cf\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'c0\'fb
+\f2  
+\f1 \'b9\'e6\'c7\'e2\'bc\'ba\'c0\'cc
+\f2  
+\f1 \'b9\'dd\'b4\'eb\'c0\'ce
+\f2  
+\f1 \'b0\'e6\'bf\'ec\'c0\'cc\'b4\'d9
+\f2 . \'93the rest of the world should learn from India\'94
+\f1 \'bf\'cd
+\f2  \'93Indians learn from the rest of the world\'94
+\f1 \'b4\'c2
+\f2  
+\f1 \'c1\'d6\'c3\'bc\'bf\'cd
+\f2  
+\f1 \'b0\'b4\'c3\'bc\'b0\'a1
+\f2  
+\f1 \'b9\'d9\'b2\'ef
+\f2  
+\f1 \'b9\'ae\'c0\'e5\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b7\'af\'c7\'d1
+\f2  
+\f1 \'bf\'c0\'b7\'f9\'b4\'c2
+\f2  Paraphrase Detection
+\f1 \'c0\'cc
+\f2  
+\f1 \'b4\'dc\'bc\'f8
+\f2  
+\f1 \'c0\'af\'bb\'e7\'b5\'b5
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'b0\'a1
+\f2  
+\f1 \'be\'c6\'b4\'cf\'b6\'f3
+\f2  predicate-argument structure
+\f1 \'bf\'cd
+\f2  semantic role
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'b8\'ba\'d0\'c7\'d8\'be\'df
+\f2  
+\f1 \'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'ae\'c1\'a6\'c0\'d3\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 False negative
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b8\'a6
+\f2  
+\f1 \'b4\'d9\'b8\'a5
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b8\'bb\'c7\'d1
+\f2  
+\f1 \'b0\'e6\'bf\'ec\'b0\'a1
+\f2  
+\f1 \'c6\'f7\'c7\'d4\'b5\'c7\'be\'fa\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2383\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'af\'c7\'fc
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Sentence 1
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Sentence 2
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Gold
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f0\b\fs26\fsmilli13333 \cf0 Pred
+\f2\b0\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c7\'d8\'bc\'ae
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2383\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 different expression, same meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 how does one keep oneself motivated throughout a semester?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 what is the best way to keep oneself motivated (to study) for a longer time?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'b5\'bf\'b1\'e2
+\f2  
+\f1 \'c0\'af\'c1\'f6\'b6\'f3\'b4\'c2
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b4\'c2
+\f2  
+\f1 \'b0\'b0\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'b0\'fa
+\f2  
+\f1 \'b9\'fc\'c0\'a7\'b0\'a1
+\f2  
+\f1 \'b4\'de\'b6\'f3
+\f2  non-paraphrase
+\f1 \'b7\'ce
+\f2  
+\f1 \'bf\'c0\'c6\'c7
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2383\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 different expression, same meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 can i use short clips from copyrighted songs in my youtube videos?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 how do you use copyrighted music on youtube?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'fa\'c0\'db\'b1\'c7
+\f2  
+\f1 \'c0\'bd\'be\'c7
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c0\'cc\'b6\'f3\'b4\'c2
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'c0\'c7\'b9\'cc\'b0\'a1
+\f2  
+\f1 \'b0\'b0\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'c1\'fa\'b9\'ae
+\f2  
+\f1 \'c7\'fc\'bd\'c4
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c5\'a9\'b0\'d4
+\f2  
+\f1 \'b9\'dd\'bf\'b5
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1783\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx1440
+\clvertalt \clshdrawnil \clwWidth2443\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx2880
+\clvertalt \clshdrawnil \clwWidth2603\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx5760
+\clvertalt \clshdrawnil \clwWidth583\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx7200
+\clvertalt \clshdrawnil \clwWidth2383\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 different expression, same meaning
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 what\'92s the best way to learn c++?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 how can i learn c and c++?
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 1
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 0
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b4\'eb\'bb\'f3\'b0\'fa
+\f2  
+\f1 \'c7\'a5\'c7\'f6\'c0\'cc
+\f2  
+\f1 \'be\'e0\'b0\'a3
+\f2  
+\f1 \'b4\'de\'b6\'f3
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'c0\'af\'bb\'e7\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'b3\'b7\'b0\'d4
+\f2  
+\f1 \'c6\'c7\'b4\'dc
+\f2\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c0\'cc\'b7\'af\'c7\'d1
+\f2  false negative
+\f1 \'b4\'c2
+\f2  GPT-2 
+\f1 \'b1\'e2\'b9\'dd
+\f2  cloze-style 
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  
+\f1 \'c7\'a5\'b8\'e9\'c0\'fb
+\f2  
+\f1 \'c7\'a5\'c7\'f6
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b8\'a6
+\f2  
+\f1 \'c0\'c7\'b9\'cc
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b7\'ce
+\f2  
+\f1 \'c7\'d8\'bc\'ae\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bd\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 . 
+\f1 \'c6\'af\'c8\'f7
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'c0\'c7
+\f2  
+\f1 \'b8\'f1\'c0\'fb\'c0\'ba
+\f2  
+\f1 \'c0\'af\'bb\'e7\'c7\'cf\'c1\'f6\'b8\'b8
+\f2  
+\f1 \'b1\'b8\'c3\'bc\'c0\'fb\'c0\'ce
+\f2  
+\f1 \'c7\'a5\'c7\'f6
+\f2 , 
+\f1 \'b9\'fc\'c0\'a7
+\f2 , 
+\f1 \'ba\'ce\'b0\'a1
+\f2  
+\f1 \'c1\'b6\'b0\'c7\'c0\'cc
+\f2  
+\f1 \'b4\'de\'b6\'f3\'c1\'fa
+\f2  
+\f1 \'b6\'a7
+\f2  
+\f1 \'b8\'f0\'b5\'a8\'c0\'cc
+\f2  paraphrase 
+\f1 \'b0\'fc\'b0\'e8\'b8\'a6
+\f2  
+\f1 \'b3\'f5\'c4\'a5
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'be\'fa\'b4\'d9
+\f2 .
+\fs24 \
+
+\fs26\fsmilli13333 Borderline case
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  yes probability
+\f1 \'b0\'a1
+\f2  threshold 
+\f1 \'b1\'d9\'c3\'b3\'bf\'a1
+\f2  
+\f1 \'c0\'a7\'c4\'a1\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'bf\'b9\'c3\'f8\'c0\'cc
+\f2  
+\f1 \'ba\'d2\'be\'c8\'c1\'a4\'c7\'d1
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b0\'a1
+\f2  
+\f1 \'c6\'f7\'c7\'d4\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b7\'af\'c7\'d1
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b4\'c2
+\f2  threshold calibration
+\f1 \'c0\'c7
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'bc\'ba\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'a9\'c1\'d8\'b4\'d9
+\f2 . 
+\f1 \'b4\'dc\'bc\'f8\'c8\'f7
+\f2  0.5
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'cf\'b8\'e9
+\f2  positive
+\f1 \'bf\'cd
+\f2  negative
+\f1 \'c0\'c7
+\f2  
+\f1 \'b0\'e6\'b0\'e8\'bf\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'c2
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b5\'e9\'c0\'cc
+\f2  
+\f1 \'bd\'b1\'b0\'d4
+\f2  
+\f1 \'b5\'da\'c1\'fd\'c8\'fa
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad
+\f2  threshold
+\f1 \'b8\'a6
+\f2  0.56
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c1\'b6\'c1\'a4\'c7\'d1
+\f2  
+\f1 \'b0\'cd\'c0\'ba
+\f2  
+\f1 \'c0\'cc
+\f2  
+\f1 \'b0\'e6\'b0\'e8
+\f2  
+\f1 \'bb\'e7\'b7\'ca\'b5\'e9\'c0\'c7
+\f2  
+\f1 \'c0\'cf\'ba\'ce\'b8\'a6
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'ba\'b8\'bc\'f6\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c6\'c7\'b4\'dc\'c7\'cf\'b5\'b5\'b7\'cf
+\f2  
+\f1 \'b8\'b8\'b5\'e7
+\f2  
+\f1 \'c8\'bf\'b0\'fa\'b0\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\sa106\partightenfactor0
+
+\f0\b\fs45\fsmilli22667 \cf0 8.9 
+\f1\b0 \'c3\'d6\'c1\'be
+\f0\b  
+\f1\b0 \'bb\'ea\'c3\'e2\'b9\'b0
+\f0\b\fs36 \
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\b0\fs26\fsmilli13333 \cf0 \'c3\'d6\'c1\'be
+\f2  
+\f1 \'bb\'ea\'c3\'e2\'b9\'b0\'c0\'ba
+\f2  
+\f1 \'b4\'d9\'c0\'bd\'b0\'fa
+\f2  
+\f1 \'b0\'b0\'b4\'d9
+\f2 .
+\fs24 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth9223\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c7\'d7\'b8\'f1
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\qc\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c6\'c4\'c0\'cf
+\f2\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth9223\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c3\'d6\'c1\'be
+\f2  checkpoint
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 checkpoints/full-direct-paraphrase.pt
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth9223\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c3\'d6\'c1\'be
+\f2  test prediction
+\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 predictions/para-test-final.csv
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth9223\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bd\'c7\'c7\'e8
+\f2  
+\f1 \'b0\'e1\'b0\'fa
+\f2  
+\f1 \'b1\'e2\'b7\'cf
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 results/paraphrase_experiments.csv
+\fs24 \cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth2623\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth9223\clftsWidth3 \clbrdrt\brdrs\brdrw10\brdrcf2 \clbrdrl\brdrs\brdrw10\brdrcf2 \clbrdrb\brdrs\brdrw10\brdrcf2 \clbrdrr\brdrs\brdrw10\brdrcf2 \clpadt133 \clpadl133 \clpadb133 \clpadr133 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'bf\'c0\'b7\'f9
+\f2  
+\f1 \'ba\'d0\'bc\'ae
+\f2  
+\f1 \'b0\'e1\'b0\'fa
+\f2\fs24 \cell 
+\pard\intbl\itap1\pardeftab720\sa320\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 results/error_analysis_para.csv
+\fs24 \cell \lastrow\row
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'c3\'d6\'c1\'be
+\f2  test prediction 
+\f1 \'c6\'c4\'c0\'cf\'c0\'ba
+\f2  
+\f1 \'c3\'d1
+\f2  80,859
+\f1 \'c1\'d9\'b7\'ce
+\f2  
+\f1 \'bb\'fd\'bc\'ba\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'b4\'c2
+\f2  header 1
+\f1 \'c1\'d9\'b0\'fa
+\f2  test example 80,858
+\f1 \'b0\'b3\'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  
+\f1 \'bf\'b9\'c3\'f8
+\f2  
+\f1 \'b0\'e1\'b0\'fa\'bf\'a1
+\f2  
+\f1 \'c7\'d8\'b4\'e7\'c7\'d1\'b4\'d9
+\f2 . Test set
+\f1 \'c0\'ba
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  prediction 
+\f1 \'bb\'fd\'bc\'ba\'bf\'a1\'b8\'b8
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , prompt 
+\f1 \'bc\'b1\'c5\'c3\'c0\'cc\'b3\'aa
+\f2  threshold 
+\f1 \'c1\'b6\'c1\'a4\'bf\'a1\'b4\'c2
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9
+\f2 .
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs48 \cf0 9. 
+\f1\b0 \'b0\'e1\'b7\'d0
+\f0\b  
+\f1\b0 \'b9\'d7
+\f0\b  
+\f1\b0 \'c7\'e2\'c8\'c4
+\f0\b  
+\f1\b0 \'bf\'ac\'b1\'b8
+\f2\fs24 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26\fsmilli13333 \cf0 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'c1\'d6\'bf\'e4
+\f2  
+\f1 \'b1\'b8\'bc\'ba
+\f2  
+\f1 \'bf\'e4\'bc\'d2\'b8\'a6
+\f2  
+\f1 \'c1\'f7\'c1\'a2
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'c0\'cc\'b8\'a6
+\f2  
+\f1 \'b0\'a8\'c1\'a4
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'b0\'fa
+\f2  Paraphrase Detection 
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9\'bf\'a1
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . PART-I
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  AdamW, causal self-attention, GPT-2 layer, embedding, weight tying, sentiment classifier
+\f1 \'b8\'a6
+\f2  
+\f1 \'b1\'b8\'c7\'f6\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . SST
+\f1 \'bf\'cd
+\f2  CFIMDB 
+\f1 \'bd\'c7\'c7\'e8
+\f2  
+\f1 \'b0\'e1\'b0\'fa
+\f2 , 4
+\f1 \'b0\'b3
+\f2  
+\f1 \'c1\'b6\'b0\'c7
+\f2  
+\f1 \'c1\'df
+\f2  3
+\f1 \'b0\'b3\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'c3\'ca\'b0\'fa\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , 
+\f1 \'b3\'aa\'b8\'d3\'c1\'f6
+\f2  1
+\f1 \'b0\'b3
+\f2  
+\f1 \'c1\'b6\'b0\'c7\'b5\'b5
+\f2  
+\f1 \'b1\'e2\'c1\'d8
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'bf\'a1
+\f2  
+\f1 \'b1\'d9\'c1\'a2\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\
+
+\fs26\fsmilli13333 PART-II
+\f1 \'bf\'a1\'bc\'ad\'b4\'c2
+\f2  Quora Paraphrase Detection
+\f1 \'c0\'bb
+\f2  Cloze-style yes/no prediction 
+\f1 \'b9\'ae\'c1\'a6\'b7\'ce
+\f2  
+\f1 \'b1\'b8\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'bc\'bc
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  prompt template
+\f1 \'c0\'bb
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'d1
+\f2  
+\f1 \'b0\'e1\'b0\'fa
+\f2  direct prompt
+\f1 \'b0\'a1
+\f2  
+\f1 \'b0\'a1\'c0\'e5
+\f2  
+\f1 \'c1\'c1\'c0\'ba
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'ba\'b8\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'fc\'c3\'bc
+\f2  train set
+\f1 \'c0\'b8\'b7\'ce
+\f2  3 epoch 
+\f1 \'c7\'d0\'bd\'c0\'c7\'d1
+\f2  direct 
+\f1 \'b8\'f0\'b5\'a8\'c0\'ba
+\f2  dev accuracy 0.887, dev F1 0.880
+\f1 \'c0\'bb
+\f2  
+\f1 \'b1\'e2\'b7\'cf\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'c0\'cc\'c8\'c4
+\f2  bidirectional inference
+\f1 \'b8\'a6
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'bf\'a9
+\f2  dev accuracy
+\f1 \'b8\'a6
+\f2  0.890
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c7\'cf\'bf\'b4\'b0\'ed
+\f2 , threshold calibration
+\f1 \'c0\'bb
+\f2  
+\f1 \'c5\'eb\'c7\'d8
+\f2  
+\f1 \'c3\'d6\'c1\'be
+\f2  dev accuracy 0.892, dev F1 0.884
+\f1 \'b8\'a6
+\f2  
+\f1 \'b4\'de\'bc\'ba\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\
+
+\f1\fs26\fsmilli13333 \'ba\'bb
+\f2  
+\f1 \'c7\'c1\'b7\'ce\'c1\'a7\'c6\'ae\'c0\'c7
+\f2  
+\f1 \'c7\'d9\'bd\'c9
+\f2  
+\f1 \'c1\'f8\'ba\'b8\'b4\'c2
+\f2  GPT-2 
+\f1 \'b1\'e2\'b9\'dd
+\f2  Cloze-style Paraphrase Detection
+\f1 \'bf\'a1\'bc\'ad
+\f2  prompt 
+\f1 \'c7\'fc\'bd\'c4
+\f2 , 
+\f1 \'c0\'d4\'b7\'c2
+\f2  
+\f1 \'bc\'f8\'bc\'ad
+\f2  
+\f1 \'b4\'eb\'c4\'aa\'bc\'ba
+\f2 , threshold calibration
+\f1 \'c0\'cc\'b6\'f3\'b4\'c2
+\f2  
+\f1 \'bc\'bc
+\f2  
+\f1 \'b0\'a1\'c1\'f6
+\f2  
+\f1 \'bf\'e4\'bc\'d2\'b8\'a6
+\f2  
+\f1 \'ba\'d0\'b8\'ae\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c7\'cf\'b0\'ed
+\f2 , 
+\f1 \'b0\'a2\'b0\'a2\'c0\'c7
+\f2  
+\f1 \'c8\'bf\'b0\'fa\'b8\'a6
+\f2  dev set ablation
+\f1 \'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'df\'b4\'d9\'b4\'c2
+\f2  
+\f1 \'c1\'a1\'c0\'cc\'b4\'d9
+\f2 . 
+\f1 \'c6\'af\'c8\'f7
+\f2  
+\f1 \'b8\'f0\'b5\'a8
+\f2  
+\f1 \'b1\'b8\'c1\'b6\'b8\'a6
+\f2  
+\f1 \'c5\'a9\'b0\'d4
+\f2  
+\f1 \'ba\'af\'b0\'e6\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'b0\'ed\'b5\'b5
+\f2  GPT-2
+\f1 \'c0\'c7
+\f2  
+\f1 \'bb\'e7\'c0\'fc\'c7\'d0\'bd\'c0
+\f2  
+\f1 \'b8\'f1\'c7\'a5\'bf\'cd
+\f2  Paraphrase Detection 
+\f1 \'c5\'c2\'bd\'ba\'c5\'a9
+\f2  
+\f1 \'bb\'e7\'c0\'cc\'c0\'c7
+\f2  
+\f1 \'b0\'a3\'b1\'d8\'c0\'bb
+\f2  
+\f1 \'c1\'d9\'c0\'cc\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bc\'ba\'b4\'c9\'c0\'bb
+\f2  
+\f1 \'b4\'dc\'b0\'e8\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 .
+\fs24 \
+\
+
+\f1\fs26\fsmilli13333 \'c7\'d1\'b0\'e8\'b5\'b5
+\f2  
+\f1 \'c1\'b8\'c0\'e7\'c7\'d1\'b4\'d9
+\f2 . 
+\f1 \'c3\'b9\'c2\'b0
+\f2 , 
+\f1 \'bd\'c7\'c7\'e8\'c0\'ba
+\f2  
+\f1 \'c1\'a6\'c7\'d1\'b5\'c8
+\f2  
+\f1 \'c7\'cf\'c0\'cc\'c6\'db\'c6\'c4\'b6\'f3\'b9\'cc\'c5\'cd
+\f2  
+\f1 \'c1\'b6\'c7\'d5\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'b5\'c7\'be\'fa\'b4\'d9
+\f2 . Learning rate, max length, epoch 
+\f1 \'bc\'f6\'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'b3\'d0\'c0\'ba
+\f2  
+\f1 \'c5\'bd\'bb\'f6\'c0\'ba
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'b8\'f8\'c7\'cf\'bf\'b4\'b4\'d9
+\f2 . 
+\f1 \'b5\'d1\'c2\'b0
+\f2 , 
+\f1 \'bf\'a9\'b7\'af
+\f2  random seed
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  
+\f1 \'b9\'dd\'ba\'b9
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c0\'bb
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'c0\'b8\'b9\'c7\'b7\'ce
+\f2  
+\f1 \'b0\'e1\'b0\'fa\'c0\'c7
+\f2  
+\f1 \'c5\'eb\'b0\'e8\'c0\'fb
+\f2  
+\f1 \'be\'c8\'c1\'a4\'bc\'ba\'c0\'ba
+\f2  
+\f1 \'c3\'df\'b0\'a1
+\f2  
+\f1 \'b0\'cb\'c1\'f5\'c0\'cc
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'c7\'cf\'b4\'d9
+\f2 . 
+\f1 \'bc\'c2\'c2\'b0
+\f2 , LoRA
+\f1 \'b3\'aa
+\f2  ReFT
+\f1 \'bf\'cd
+\f2  
+\f1 \'b0\'b0\'c0\'ba
+\f2  parameter-efficient fine-tuning 
+\f1 \'b9\'e6\'b9\'fd\'c0\'ba
+\f2  
+\f1 \'c0\'fb\'bf\'eb\'c7\'cf\'c1\'f6
+\f2  
+\f1 \'be\'ca\'be\'d2\'b4\'d9
+\f2 . 
+\f1 \'b3\'dd\'c2\'b0
+\f2 , 
+\f1 \'bf\'c0\'b7\'f9
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'d1
+\f2  semantic role reversal, condition difference, entity difference 
+\f1 \'b9\'ae\'c1\'a6\'b4\'c2
+\f2  
+\f1 \'b4\'dc\'bc\'f8
+\f2  prompt 
+\f1 \'c1\'b6\'c1\'a4\'b8\'b8\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'bf\'cf\'c0\'fc\'c8\'f7
+\f2  
+\f1 \'c7\'d8\'b0\'e1\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'be\'ee\'b7\'c6\'b4\'d9
+\f2 .
+\fs24 \
+\
+
+\f1\fs26\fsmilli13333 \'c7\'e2\'c8\'c4
+\f2  
+\f1 \'bf\'ac\'b1\'b8\'bf\'a1\'bc\'ad\'b4\'c2
+\f2  
+\f1 \'bc\'bc
+\f2  
+\f1 \'b9\'e6\'c7\'e2\'c0\'c7
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c0\'bb
+\f2  
+\f1 \'b0\'ed\'b7\'c1\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'c3\'b9\'c2\'b0
+\f2 , learning rate
+\f1 \'bf\'cd
+\f2  max length
+\f1 \'bf\'a1
+\f2  
+\f1 \'b4\'eb\'c7\'d1
+\f2  
+\f1 \'c3\'df\'b0\'a1
+\f2  ablation
+\f1 \'c0\'bb
+\f2  
+\f1 \'bc\'f6\'c7\'e0\'c7\'cf\'bf\'a9
+\f2  
+\f1 \'b1\'e4
+\f2  
+\f1 \'c1\'fa\'b9\'ae\'bd\'d6\'bf\'a1\'bc\'ad
+\f2  
+\f1 \'c1\'a4\'ba\'b8
+\f2  
+\f1 \'bc\'d5\'bd\'c7\'c0\'bb
+\f2  
+\f1 \'c1\'d9\'c0\'cf
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'c2\'c1\'f6
+\f2  
+\f1 \'c8\'ae\'c0\'ce\'c7\'d2
+\f2  
+\f1 \'c7\'ca\'bf\'e4\'b0\'a1
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b5\'d1\'c2\'b0
+\f2 , semantic role reversal
+\f1 \'c0\'cc\'b3\'aa
+\f2  
+\f1 \'c1\'b6\'b0\'c7
+\f2  
+\f1 \'c2\'f7\'c0\'cc\'b8\'a6
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c0\'df
+\f2  
+\f1 \'c3\'b3\'b8\'ae\'c7\'cf\'b1\'e2
+\f2  
+\f1 \'c0\'a7\'c7\'d8
+\f2  prompt
+\f1 \'bf\'a1
+\f2  
+\f1 \'ba\'f1\'b1\'b3
+\f2  
+\f1 \'b1\'e2\'c1\'d8\'c0\'bb
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'b8\'ed\'bd\'c3\'c0\'fb\'c0\'b8\'b7\'ce
+\f2  
+\f1 \'c6\'f7\'c7\'d4\'c7\'cf\'b4\'c2
+\f2  
+\f1 \'b9\'e6\'bd\'c4\'c0\'bb
+\f2  
+\f1 \'bd\'c7\'c7\'e8\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'bc\'c2\'c2\'b0
+\f2 , encoder-based sentence-pair model 
+\f1 \'b6\'c7\'b4\'c2
+\f2  contrastive sentence embedding 
+\f1 \'b9\'e6\'bd\'c4\'b0\'fa
+\f2  
+\f1 \'ba\'f1\'b1\'b3\'c7\'cf\'bf\'a9
+\f2  GPT-2 
+\f1 \'b1\'e2\'b9\'dd
+\f2  cloze-style 
+\f1 \'c1\'a2\'b1\'d9\'c0\'c7
+\f2  
+\f1 \'c0\'e5\'b4\'dc\'c1\'a1\'c0\'bb
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'b8\'ed\'c8\'ae\'c8\'f7
+\f2  
+\f1 \'ba\'d0\'bc\'ae\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'b4\'d9
+\f2 . 
+\f1 \'b6\'c7\'c7\'d1
+\f2  
+\f1 \'c1\'a6\'c7\'d1\'b5\'c8
+\f2  GPU 
+\f1 \'c8\'af\'b0\'e6\'bf\'a1\'bc\'ad\'b5\'b5
+\f2  
+\f1 \'c0\'fb\'bf\'eb
+\f2  
+\f1 \'b0\'a1\'b4\'c9\'c7\'d1
+\f2  LoRA 
+\f1 \'b0\'e8\'bf\'ad
+\f2  fine-tuning
+\f1 \'c0\'bb
+\f2  
+\f1 \'bb\'e7\'bf\'eb\'c7\'cf\'b8\'e9
+\f2  
+\f1 \'b4\'f5
+\f2  
+\f1 \'c0\'fb\'c0\'ba
+\f2  
+\f1 \'c6\'c4\'b6\'f3\'b9\'cc\'c5\'cd
+\f2  
+\f1 \'be\'f7\'b5\'a5\'c0\'cc\'c6\'ae\'b7\'ce
+\f2  
+\f1 \'c3\'df\'b0\'a1
+\f2  
+\f1 \'bc\'ba\'b4\'c9
+\f2  
+\f1 \'b0\'b3\'bc\'b1\'c0\'bb
+\f2  
+\f1 \'bd\'c3\'b5\'b5\'c7\'d2
+\f2  
+\f1 \'bc\'f6
+\f2  
+\f1 \'c0\'d6\'c0\'bb
+\f2  
+\f1 \'b0\'cd\'c0\'cc\'b4\'d9
+\f2 .
+\fs24 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs48 \cf0 10. 
+\f1\b0 \'c2\'fc\'b0\'ed\'b9\'ae\'c7\'e5
+\f2\fs24 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs26\fsmilli13333 \cf0 [1] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, \uc0\u321 ., & Polosukhin, I. (2017). Attention Is All You Need. NeurIPS.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [2] Radford, A., Narasimhan, K., Salimans, T., & Sutskever, I. (2018). Improving Language Understanding by Generative Pre-Training.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [3] Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., & Sutskever, I. (2019). Language Models are Unsupervised Multitask Learners.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [4] Loshchilov, I., & Hutter, F. (2019). Decoupled Weight Decay Regularization. ICLR.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [5] Socher, R., Perelygin, A., Wu, J., Chuang, J., Manning, C. D., Ng, A., & Potts, C. (2013). Recursive Deep Models for Semantic Compositionality over a Sentiment Treebank. EMNLP.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [6] Fernando, S., & Stevenson, M. (2008). A Semantic Similarity Approach to Paraphrase Detection. Proceedings of the 11th Annual Research Colloquium of the UK Special Interest Group for Computational Linguistics.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [7] Schick, T., & Sch\'fctze, H. (2021). Exploiting Cloze-Questions for Few-Shot Text Classification and Natural Language Inference. EACL.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [8] Gao, T., Fisch, A., & Chen, D. (2021). Making Pre-trained Language Models Better Few-shot Learners. ACL-IJCNLP.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [9] Hu, S., Ding, N., Wang, H., Liu, Z., Wang, J., Li, J., Wu, W., & Sun, M. (2022). Knowledgeable Prompt-tuning: Incorporating Knowledge into Prompt Verbalizer for Text Classification. ACL.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [10] Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. EMNLP.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [11] Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017). On Calibration of Modern Neural Networks. ICML.
+\fs24 \
+\
+
+\fs26\fsmilli13333 [12] Raffel, C., Shazeer, N., Roberts, A., Lee, K., Narang, S., Matena, M., Zhou, Y., Li, W., & Liu, P. J. (2020). Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer. JMLR.
+\fs24 \
+}
