@@ -1,0 +1,4 @@
+output_tag	mode	field	path	exists
+full-direct-bi-error	error_analysis	checkpoint	checkpoints/full-direct-paraphrase.pt	yes
+full-direct-bi-error	error_analysis	para_dev_out	predictions/para-dev-full-direct-bi-error.csv	no
+full-direct-bi-error	error_analysis	para_test_out	predictions/para-test-output.csv	no

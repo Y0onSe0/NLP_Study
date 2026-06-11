@@ -1,0 +1,4 @@
+output_tag	mode	field	path	exists
+full-direct-bi-calib	calibrate_dev	checkpoint	checkpoints/full-direct-paraphrase.pt	yes
+full-direct-bi-calib	calibrate_dev	para_dev_out	predictions/para-dev-full-direct-bi-calib.csv	no
+full-direct-bi-calib	calibrate_dev	para_test_out	predictions/para-test-output.csv	no

@@ -1,0 +1,4 @@
+output_tag	mode	field	path	exists
+full-direct-final	test_predict	checkpoint	checkpoints/full-direct-paraphrase.pt	yes
+full-direct-final	test_predict	para_dev_out	predictions/para-dev-full-direct-final.csv	no
+full-direct-final	test_predict	para_test_out	predictions/para-test-final.csv	yes

@@ -12,7 +12,7 @@ Verbalizer token check:
   tokenizer.encode(" no") = [645]
   Selected verbalizer: trailing-space prompt + unspaced yes/no tokens (yes=8505, no=3919)
 Loaded 283003 train examples from data/quora-train.csv
-Loaded 40429 train examples from data/quora-dev.csv
+Loaded 40429 dev examples from data/quora-dev.csv
 save the model to checkpoints/full-direct-paraphrase.pt
 Epoch 0: train loss :: 0.360, dev acc :: 0.870, dev f1 :: 0.863
 save the model to checkpoints/full-direct-paraphrase.pt
@@ -20,5 +20,5 @@ Epoch 1: train loss :: 0.272, dev acc :: 0.884, dev f1 :: 0.877
 save the model to checkpoints/full-direct-paraphrase.pt
 Epoch 2: train loss :: 0.224, dev acc :: 0.887, dev f1 :: 0.880
 Loaded model from checkpoints/full-direct-paraphrase.pt
-Loaded 40429 train examples from data/quora-dev.csv
+Loaded 40429 dev examples from data/quora-dev.csv
 dev paraphrase acc :: 0.887, f1 :: 0.880

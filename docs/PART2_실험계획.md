@@ -16,6 +16,10 @@
 - test set은 `test_predict` 모드에서 최종 제출 파일을 만들 때만 읽는다.
 - test prediction을 확인한 뒤 checkpoint, prompt, threshold를 다시 바꾸지 않는다.
 
+## Split 표기 검증 메모
+
+`data/quora-dev.csv`를 읽은 실행은 dev 사용으로 기록한다. 과거 로그에 `Loaded ... train examples from data/quora-dev.csv`처럼 표시된 문구는 dev 파일을 train split으로 개발했다는 뜻이 아니라, `load_paraphrase_data()`의 `split` 기본값이 `train`이라 출력 라벨만 잘못 찍힌 것이다. 이 혼동을 막기 위해 dev 로드 호출은 `split='dev'`를 명시하도록 수정했다.
+
 ## 보고서 Ablation Table 기준
 
 1. Baseline

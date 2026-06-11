@@ -47,7 +47,7 @@ Part-I SST/CFIMDB prediction 파일은 `predictions/` 아래에 있어야 하며
 python paraphrase_detection.py --help
 ```
 
-`paraphrase_detection.py`의 실행 모드는 `train_dev`, `dev_predict`, `calibrate_dev`, `error_analysis`, `test_predict`이다. Prompt 선택, threshold calibration, error analysis는 train/dev 기준으로만 수행하고, test set은 checkpoint, prompt, threshold가 모두 확정된 뒤 최종 prediction 생성에만 사용한다. 자세한 실험 절차는 `docs/part2/` 문서를 참고한다.
+`paraphrase_detection.py`의 실행 모드는 `train_dev`, `dev_predict`, `calibrate_dev`, `error_analysis`, `test_predict`이다. Prompt 선택, threshold calibration, error analysis는 train/dev 기준으로만 수행하고, test set은 checkpoint, prompt, threshold가 모두 확정된 뒤 최종 prediction 생성에만 사용한다. Split 사용 검증과 기존 로그 표기 오류 설명은 `docs/part2/04_data_split_audit.md`에 정리했다.
 
 ### 데이터셋 준비
 

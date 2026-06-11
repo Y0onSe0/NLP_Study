@@ -1,0 +1,16 @@
+output_tag	mode	field	path	exists
+gpu-smoke-baseline	train_dev	checkpoint	checkpoints/gpu-smoke-baseline-paraphrase.pt	no
+gpu-smoke-baseline	train_dev	para_dev_out	predictions/para-dev-gpu-smoke-baseline.csv	no
+gpu-smoke-baseline	train_dev	para_test_out	predictions/para-test-output.csv	no
+screen-baseline	train_dev	checkpoint	checkpoints/screen-baseline-paraphrase.pt	no
+screen-baseline	train_dev	para_dev_out	predictions/para-dev-screen-baseline.csv	no
+screen-baseline	train_dev	para_test_out	predictions/para-test-output.csv	no
+screen-direct	train_dev	checkpoint	checkpoints/screen-direct-paraphrase.pt	no
+screen-direct	train_dev	para_dev_out	predictions/para-dev-screen-direct.csv	no
+screen-direct	train_dev	para_test_out	predictions/para-test-output.csv	no
+screen-meaning	train_dev	checkpoint	checkpoints/screen-meaning-paraphrase.pt	no
+screen-meaning	train_dev	para_dev_out	predictions/para-dev-screen-meaning.csv	no
+screen-meaning	train_dev	para_test_out	predictions/para-test-output.csv	no
+full-direct	train_dev	checkpoint	checkpoints/full-direct-paraphrase.pt	yes
+full-direct	train_dev	para_dev_out	predictions/para-dev-full-direct.csv	no
+full-direct	train_dev	para_test_out	predictions/para-test-output.csv	no

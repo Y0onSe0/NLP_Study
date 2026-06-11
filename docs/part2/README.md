@@ -9,6 +9,7 @@
 - [01_baseline_implementation.md](01_baseline_implementation.md): baseline 구현 설명
 - [02_improvement_methodology.md](02_improvement_methodology.md): 성능향상 방법론 설명
 - [03_implementation_guide.md](03_implementation_guide.md): 실제 실행 순서와 구현/검증 방법
+- [04_data_split_audit.md](04_data_split_audit.md): train/dev/test 사용 내역 검증
 
 ## 전체 실험 흐름
 

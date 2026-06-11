@@ -1,0 +1,2 @@
+output_tag,mode,checkpoint,prompt_template,bidirectional,threshold,lr,batch_size,grad_accum_steps,epochs,max_train_examples,max_dev_examples,max_length,dev_acc,dev_f1,selected_threshold,para_dev_out,para_test_out
+full-direct-final,test_predict,checkpoints/full-direct-paraphrase.pt,direct,True,0.56,1e-05,8,1,10,,,128,,,,predictions/para-dev-full-direct-final.csv,predictions/para-test-final.csv

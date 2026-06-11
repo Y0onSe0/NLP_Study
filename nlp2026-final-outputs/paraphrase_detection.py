@@ -253,12 +253,8 @@ def train(args):
   """Quora 데이터셋에서 Paraphrase Detection을 위한 GPT-2 훈련."""
   device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
   # 데이터, 해당 데이터셋 및 데이터로드 생성하기.
-  para_train_data = maybe_limit_data(
-    load_paraphrase_data(args.para_train, split='train'), args.max_train_examples
-  )
-  para_dev_data = maybe_limit_data(
-    load_paraphrase_data(args.para_dev, split='dev'), args.max_dev_examples
-  )
+  para_train_data = maybe_limit_data(load_paraphrase_data(args.para_train), args.max_train_examples)
+  para_dev_data = maybe_limit_data(load_paraphrase_data(args.para_dev), args.max_dev_examples)
 
   para_train_data = ParaphraseDetectionDataset(para_train_data, args)
   para_dev_data = ParaphraseDetectionDataset(para_dev_data, args)
@@ -344,9 +340,7 @@ def predict_dev(args):
   device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
   model = load_model_for_prediction(args, device)
 
-  para_dev_data = maybe_limit_data(
-    load_paraphrase_data(args.para_dev, split='dev'), args.max_dev_examples
-  )
+  para_dev_data = maybe_limit_data(load_paraphrase_data(args.para_dev), args.max_dev_examples)
 
   para_dev_data = ParaphraseDetectionDataset(para_dev_data, args)
   para_dev_dataloader = build_paraphrase_dataloader(para_dev_data, args.batch_size, shuffle=False)
@@ -366,9 +360,7 @@ def calibrate_dev(args):
   device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
   model = load_model_for_prediction(args, device)
 
-  para_dev_data = maybe_limit_data(
-    load_paraphrase_data(args.para_dev, split='dev'), args.max_dev_examples
-  )
+  para_dev_data = maybe_limit_data(load_paraphrase_data(args.para_dev), args.max_dev_examples)
   para_dev_data = ParaphraseDetectionDataset(para_dev_data, args)
   para_dev_dataloader = build_paraphrase_dataloader(para_dev_data, args.batch_size, shuffle=False)
 
@@ -400,9 +392,7 @@ def error_analysis(args):
   device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
   model = load_model_for_prediction(args, device)
 
-  para_dev_records = maybe_limit_data(
-    load_paraphrase_data(args.para_dev, split='dev'), args.max_dev_examples
-  )
+  para_dev_records = maybe_limit_data(load_paraphrase_data(args.para_dev), args.max_dev_examples)
   para_dev_data = ParaphraseDetectionDataset(para_dev_records, args)
   para_dev_dataloader = build_paraphrase_dataloader(para_dev_data, args.batch_size, shuffle=False)
 

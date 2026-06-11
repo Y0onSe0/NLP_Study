@@ -2,31 +2,31 @@
 
 ## 1. 관련 파일
 
-- `paraphrase_detection.py`  
+- `paraphrase_detection.py`
   `ParaphraseGPT`, 학습 루프, checkpoint 로드, 실행 모드 분기, tokenizer verbalizer 검증, error analysis 저장을 담당한다.
 
-- `datasets.py`  
+- `datasets.py`
   Quora TSV 데이터를 읽고, `baseline`, `direct`, `meaning` prompt template으로 Cloze-style 입력을 만든다. Train/dev/test dataset 모두 같은 prompt builder를 사용한다.
 
-- `evaluation.py`  
+- `evaluation.py`
   Dev/test prediction, `p_yes` 계산, bidirectional inference, threshold calibration helper를 포함한다.
 
-- `models/gpt2.py`  
+- `models/gpt2.py`
   GPT-2 backbone 구현을 포함한다. `hidden_state_to_token()`은 마지막 hidden state를 vocabulary logits로 변환한다.
 
-- `results/paraphrase_experiments.csv`  
+- `results/paraphrase_experiments.csv`
   실행 모드, checkpoint, prompt, threshold, dev accuracy, dev F1, prediction path 등 실험 기록을 저장한다.
 
-- `results/error_analysis_para.csv`  
+- `results/error_analysis_para.csv`
   Dev set 오류 분석 결과를 저장한다. False positive, false negative, borderline case가 포함된다.
 
-- `predictions/para-dev-*.csv`  
+- `predictions/para-dev-*.csv`
   Dev prediction 파일이다. 개발 중 성능 비교와 ablation 기록에 사용한다.
 
-- `predictions/para-test-final.csv`  
+- `predictions/para-test-final.csv`
   최종 제출용 test prediction 파일이다. 최종 설정 확정 후 한 번만 생성한다.
 
-- `checkpoints/*.pt`  
+- `checkpoints/*.pt`
   학습된 모델 checkpoint이다. Baseline과 prompt 개선 모델을 분리해 저장한다.
 
 ## 2. 실행 모드
@@ -40,6 +40,8 @@
 | `test_predict` | X | X | O | 최종 제출 파일 생성 |
 
 `test_predict` 외의 모드는 test set을 읽지 않는 것을 원칙으로 한다.
+
+Dev 파일을 읽는 모든 코드 경로는 `split='dev'`를 명시한다. 과거 로그에 `Loaded ... train examples from data/quora-dev.csv`처럼 표시된 경우는 dev 파일을 train으로 사용한 것이 아니라 split 이름 기본값 때문에 생긴 로깅 표기 오류다. 자세한 검증은 [04_data_split_audit.md](04_data_split_audit.md)에 정리한다.
 
 ## 3. Tokenizer / Verbalizer 검증 명령
 
