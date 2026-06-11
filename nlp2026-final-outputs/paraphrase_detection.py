@@ -212,6 +212,10 @@ def record_experiment(args, mode, metrics):
   if not args.experiment_log:
     return
   os.makedirs(os.path.dirname(args.experiment_log) or '.', exist_ok=True)
+  is_training_mode = mode == 'train_dev'
+  reads_dev = mode in {'train_dev', 'dev_predict', 'calibrate_dev', 'error_analysis'}
+  writes_dev_predictions = mode in {'train_dev', 'dev_predict'}
+  writes_test_predictions = mode == 'test_predict'
   fieldnames = [
     'output_tag', 'mode', 'checkpoint', 'prompt_template', 'bidirectional', 'threshold',
     'lr', 'batch_size', 'grad_accum_steps', 'epochs', 'max_train_examples', 'max_dev_examples',
@@ -224,18 +228,18 @@ def record_experiment(args, mode, metrics):
     'prompt_template': args.prompt_template,
     'bidirectional': args.bidirectional,
     'threshold': args.threshold,
-    'lr': args.lr,
+    'lr': args.lr if is_training_mode else 'NA',
     'batch_size': args.batch_size,
-    'grad_accum_steps': args.grad_accum_steps,
-    'epochs': args.epochs,
-    'max_train_examples': args.max_train_examples,
-    'max_dev_examples': args.max_dev_examples,
+    'grad_accum_steps': args.grad_accum_steps if is_training_mode else 'NA',
+    'epochs': args.epochs if is_training_mode else 'NA',
+    'max_train_examples': args.max_train_examples if is_training_mode else 'NA',
+    'max_dev_examples': args.max_dev_examples if reads_dev else 'NA',
     'max_length': args.max_length,
     'dev_acc': metrics.get('dev_acc'),
     'dev_f1': metrics.get('dev_f1'),
     'selected_threshold': metrics.get('selected_threshold'),
-    'para_dev_out': args.para_dev_out,
-    'para_test_out': args.para_test_out,
+    'para_dev_out': args.para_dev_out if writes_dev_predictions else 'NA',
+    'para_test_out': args.para_test_out if writes_test_predictions else 'NA',
   }
   write_header = not os.path.exists(args.experiment_log)
   with open(args.experiment_log, 'a', newline='') as fp:
@@ -522,7 +526,7 @@ def finalize_args(args):
     args.output_tag = f'{args.prompt_template}-{args.epochs}-{args.lr}'
   if args.filepath is None:
     args.filepath = os.path.join('checkpoints', f'{args.output_tag}-paraphrase.pt')
-  if args.para_dev_out == "predictions/para-dev-output.csv" and args.output_tag:
+  if args.mode in {'train_dev', 'dev_predict'} and args.para_dev_out == "predictions/para-dev-output.csv" and args.output_tag:
     args.para_dev_out = f'predictions/para-dev-{args.output_tag}.csv'
   ensure_output_dirs(args)
   return verify_yes_no_tokens(args)

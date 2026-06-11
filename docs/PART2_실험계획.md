@@ -3,8 +3,8 @@
 ## 실행 순서
 
 1. Tokenizer verbalizer를 확인한다: prompt는 trailing space로 끝나며, 다음 token은 unspaced `yes` / `no`를 사용한다.
-2. `baseline`, `direct`, `meaning` 세 prompt만 subset + 1 epoch로 screening한다.
-3. 가장 좋은 prompt 하나를 골라 full training checkpoint를 만든다.
+2. `baseline`, `direct`, `meaning` 세 prompt를 train 5,000개, dev 1,000개, 1 epoch 조건으로 screening한다.
+3. 가장 좋은 `direct` prompt로 full training checkpoint를 만든다.
 4. 같은 checkpoint로 단방향 dev prediction과 bidirectional dev prediction을 비교한다.
 5. dev set에서만 threshold를 `0.30~0.70`, step `0.01`로 calibration한다.
 6. 확정된 checkpoint, prompt, bidirectional 여부, dev-selected threshold로 dev error analysis를 생성한다.
@@ -22,9 +22,9 @@
 
 ## 보고서 Ablation Table 기준
 
-1. Baseline
-2. Prompt 개선
-3. Prompt 개선 + Bidirectional inference
-4. Prompt 개선 + Bidirectional inference + Threshold calibration
+1. Prompt screening baseline/direct/meaning
+2. Full direct
+3. Full direct + Bidirectional inference
+4. Full direct + Bidirectional inference + Threshold calibration
 
-각 행에는 checkpoint, prompt template, bidirectional 여부, threshold, dev accuracy, dev macro-F1, prediction 파일명을 함께 기록한다.
+각 행에는 checkpoint, prompt template, bidirectional 여부, threshold, dev accuracy, dev macro-F1, prediction 파일명을 함께 기록한다. 보고서 표에는 `results/report_summary_20260611.csv`를 우선 사용한다.

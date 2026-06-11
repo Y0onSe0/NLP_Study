@@ -49,6 +49,8 @@ python paraphrase_detection.py --help
 
 `paraphrase_detection.py`의 실행 모드는 `train_dev`, `dev_predict`, `calibrate_dev`, `error_analysis`, `test_predict`이다. Prompt 선택, threshold calibration, error analysis는 train/dev 기준으로만 수행하고, test set은 checkpoint, prompt, threshold가 모두 확정된 뒤 최종 prediction 생성에만 사용한다. Split 사용 검증과 기존 로그 표기 오류 설명은 `docs/part2/04_data_split_audit.md`에 정리했다.
 
+보고서 재현 기준 실행은 `scripts/rerun_part2_report_20260611.sh`와 `docs/part2/05_report_rerun_protocol_20260611.md`를 따른다. 보고서 표에는 raw 실행 이력 CSV 대신 `results/report_summary_20260611.csv`를 사용한다.
+
 ### 데이터셋 준비
 
 현재 실행에 필요한 소규모 과제 데이터는 `data/` 폴더에 포함되어 있다. 평가자는 별도 다운로드 없이 기본 경로의 `data/*.csv`와 `data/*.txt`를 사용해 실행할 수 있어야 한다.

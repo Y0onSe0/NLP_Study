@@ -79,101 +79,122 @@ python paraphrase_detection.py \
   --output_tag smoke-baseline
 ```
 
-## 5. Prompt Screening
+## 5. Canonical Report Rerun
 
-세 template을 subset + 1 epoch 조건에서 비교한다.
+보고서 숫자를 재현하는 기준 실행은 아래 스크립트다. 개별 명령을 직접 실행할 수도 있지만, 재현성 확인에는 이 스크립트를 기준으로 삼는다.
+
+```bash
+bash scripts/rerun_part2_report_20260611.sh
+```
+
+이 스크립트는 `rerun-20260611` 태그 아래에 산출물을 분리해서 저장한다. 자세한 단계별 명령은 [05_report_rerun_protocol_20260611.md](05_report_rerun_protocol_20260611.md)에 정리되어 있다.
+
+## 6. Prompt Screening
+
+세 template을 train 5,000개, dev 1,000개, 1 epoch 조건에서 비교한다.
 
 ```bash
 python paraphrase_detection.py \
   --use_gpu \
   --mode train_dev \
   --epochs 1 \
-  --batch_size 8 \
-  --max_train_examples 20000 \
-  --max_dev_examples 5000 \
+  --batch_size 4 \
+  --grad_accum_steps 2 \
+  --lr 1e-5 \
+  --max_train_examples 5000 \
+  --max_dev_examples 1000 \
+  --max_length 128 \
   --prompt_template baseline \
-  --output_tag screen-baseline
+  --output_tag screen-baseline \
+  --filepath checkpoints/screen-baseline-paraphrase.pt \
+  --para_dev_out predictions/para-dev-screen-baseline.csv
 
 python paraphrase_detection.py \
   --use_gpu \
   --mode train_dev \
   --epochs 1 \
-  --batch_size 8 \
-  --max_train_examples 20000 \
-  --max_dev_examples 5000 \
+  --batch_size 4 \
+  --grad_accum_steps 2 \
+  --lr 1e-5 \
+  --max_train_examples 5000 \
+  --max_dev_examples 1000 \
+  --max_length 128 \
   --prompt_template direct \
-  --output_tag screen-direct
+  --output_tag screen-direct \
+  --filepath checkpoints/screen-direct-paraphrase.pt \
+  --para_dev_out predictions/para-dev-screen-direct.csv
 
 python paraphrase_detection.py \
   --use_gpu \
   --mode train_dev \
   --epochs 1 \
-  --batch_size 8 \
-  --max_train_examples 20000 \
-  --max_dev_examples 5000 \
+  --batch_size 4 \
+  --grad_accum_steps 2 \
+  --lr 1e-5 \
+  --max_train_examples 5000 \
+  --max_dev_examples 1000 \
+  --max_length 128 \
   --prompt_template meaning \
-  --output_tag screen-meaning
+  --output_tag screen-meaning \
+  --filepath checkpoints/screen-meaning-paraphrase.pt \
+  --para_dev_out predictions/para-dev-screen-meaning.csv
 ```
 
-## 6. Full Training
+## 7. Full Training
 
-Baseline full training:
+Prompt screening에서 가장 높은 성능을 보인 `direct` prompt를 전체 train set으로 3 epoch 학습한다.
 
 ```bash
 python paraphrase_detection.py \
   --use_gpu \
   --mode train_dev \
-  --epochs 10 \
-  --batch_size 8 \
+  --epochs 3 \
+  --batch_size 4 \
+  --grad_accum_steps 2 \
   --lr 1e-5 \
-  --prompt_template baseline \
-  --output_tag baseline-full \
-  --filepath checkpoints/baseline-full.pt
+  --max_length 128 \
+  --prompt_template direct \
+  --output_tag full-direct \
+  --filepath checkpoints/full-direct-paraphrase.pt \
+  --para_dev_out predictions/para-dev-full-direct.csv
 ```
 
-Best prompt full training:
+`train_dev` 모드는 학습 직후 같은 checkpoint로 단방향 dev prediction을 자동 생성한다. 따라서 같은 설정의 `dev_predict`를 별도로 다시 실행하지 않는다.
 
-```bash
-python paraphrase_detection.py \
-  --use_gpu \
-  --mode train_dev \
-  --epochs 10 \
-  --batch_size 8 \
-  --lr 1e-5 \
-  --prompt_template <BEST_PROMPT> \
-  --output_tag prompt-full \
-  --filepath checkpoints/prompt-full.pt
-```
-
-## 7. Bidirectional Dev Prediction
+## 8. Bidirectional Dev Prediction
 
 ```bash
 python paraphrase_detection.py \
   --use_gpu \
   --mode dev_predict \
-  --filepath checkpoints/prompt-full.pt \
-  --prompt_template <BEST_PROMPT> \
+  --batch_size 8 \
+  --max_length 128 \
+  --filepath checkpoints/full-direct-paraphrase.pt \
+  --prompt_template direct \
   --bidirectional \
   --threshold 0.5 \
-  --output_tag prompt-bidir-dev
+  --output_tag full-direct-bi \
+  --para_dev_out predictions/para-dev-full-direct-bi.csv
 ```
 
-## 8. Threshold Calibration
+## 9. Threshold Calibration
 
 ```bash
 python paraphrase_detection.py \
   --use_gpu \
   --mode calibrate_dev \
-  --filepath checkpoints/prompt-full.pt \
-  --prompt_template <BEST_PROMPT> \
+  --batch_size 8 \
+  --max_length 128 \
+  --filepath checkpoints/full-direct-paraphrase.pt \
+  --prompt_template direct \
   --bidirectional \
   --threshold_min 0.30 \
   --threshold_max 0.70 \
   --threshold_step 0.01 \
-  --output_tag prompt-bidir-calib
+  --output_tag full-direct-bi-calib
 ```
 
-## 9. Error Analysis
+## 10. Error Analysis
 
 `error_analysis` 모드는 dev set만 사용하며, `results/error_analysis_para.csv`를 생성한다.
 
@@ -181,14 +202,17 @@ python paraphrase_detection.py \
 python paraphrase_detection.py \
   --use_gpu \
   --mode error_analysis \
-  --filepath checkpoints/prompt-full.pt \
-  --prompt_template <BEST_PROMPT> \
+  --batch_size 8 \
+  --max_length 128 \
+  --filepath checkpoints/full-direct-paraphrase.pt \
+  --prompt_template direct \
   --bidirectional \
-  --threshold <DEV_SELECTED_THRESHOLD> \
-  --output_tag prompt-bidir-error
+  --threshold 0.56 \
+  --output_tag full-direct-bi-error \
+  --error_analysis_out results/error_analysis_para.csv
 ```
 
-## 10. Final Test Prediction
+## 11. Final Test Prediction
 
 이 명령은 최종 checkpoint, prompt, threshold가 확정된 뒤 한 번만 실행한다. Test 결과를 보고 다시 threshold나 prompt를 바꾸면 안 된다.
 
@@ -196,34 +220,38 @@ python paraphrase_detection.py \
 python paraphrase_detection.py \
   --use_gpu \
   --mode test_predict \
-  --filepath checkpoints/prompt-full.pt \
-  --prompt_template <BEST_PROMPT> \
+  --batch_size 8 \
+  --max_length 128 \
+  --filepath checkpoints/full-direct-paraphrase.pt \
+  --prompt_template direct \
   --bidirectional \
-  --threshold <DEV_SELECTED_THRESHOLD> \
+  --threshold 0.56 \
   --para_test_out predictions/para-test-final.csv \
   --output_tag final-test
 ```
 
-## 11. 제출 전 확인
+## 12. 제출 전 확인
 
 ```bash
 wc -l predictions/para-test-final.csv
 head -n 5 predictions/para-test-final.csv
 tail -n 5 results/paraphrase_experiments.csv
-test -f checkpoints/prompt-full.pt && echo checkpoint-ok
+test -f checkpoints/full-direct-paraphrase.pt && echo checkpoint-ok
 python prepare_submit.py
 ```
 
-## 12. 결과 기록 양식
+## 13. 결과 기록 양식
 
 | 실험명 | prompt_template | bidirectional | threshold | dev accuracy | dev F1 | checkpoint | prediction file | 비고 |
 |---|---|---:|---:|---:|---:|---|---|---|
-| Baseline | `baseline` | X | 0.5 |  |  | `checkpoints/baseline-full.pt` | `predictions/para-dev-baseline-full.csv` | 기본 prompt |
-| Prompt 개선 | `<BEST_PROMPT>` | X | 0.5 |  |  | `checkpoints/prompt-full.pt` | `predictions/para-dev-prompt-full.csv` | screening 1위 prompt |
-| Prompt 개선 + Bidirectional inference | `<BEST_PROMPT>` | O | 0.5 |  |  | `checkpoints/prompt-full.pt` | `predictions/para-dev-prompt-bidir-dev.csv` | 같은 checkpoint 사용 |
-| Prompt 개선 + Bidirectional inference + Threshold calibration | `<BEST_PROMPT>` | O | `<DEV_SELECTED_THRESHOLD>` |  |  | `checkpoints/prompt-full.pt` | `predictions/para-dev-*.csv` | dev에서 threshold 선택 |
+| Prompt screening baseline | `baseline` | X | 0.5 | 0.708 | 0.613 | `checkpoints/rerun-20260611/screen-baseline-paraphrase.pt` | `predictions/rerun-20260611/para-dev-screen-baseline.csv` | train 5,000 / dev 1,000 |
+| Prompt screening direct | `direct` | X | 0.5 | 0.747 | 0.721 | `checkpoints/rerun-20260611/screen-direct-paraphrase.pt` | `predictions/rerun-20260611/para-dev-screen-direct.csv` | train 5,000 / dev 1,000 |
+| Prompt screening meaning | `meaning` | X | 0.5 | 0.676 | 0.525 | `checkpoints/rerun-20260611/screen-meaning-paraphrase.pt` | `predictions/rerun-20260611/para-dev-screen-meaning.csv` | train 5,000 / dev 1,000 |
+| Full direct | `direct` | X | 0.5 | 0.887 | 0.880 | `checkpoints/rerun-20260611/full-direct-paraphrase.pt` | `predictions/rerun-20260611/para-dev-full-direct.csv` | 전체 train, 3 epoch |
+| Full direct + bidirectional | `direct` | O | 0.5 | 0.890 | 0.884 | `checkpoints/rerun-20260611/full-direct-paraphrase.pt` | `predictions/rerun-20260611/para-dev-full-direct-bi.csv` | 같은 checkpoint 사용 |
+| Full direct + bidirectional + calibration | `direct` | O | 0.56 | 0.892 | 0.884 | `checkpoints/rerun-20260611/full-direct-paraphrase.pt` | `results/rerun-20260611/paraphrase_experiments.csv` | dev에서 threshold 선택 |
 
-## 13. 보고서 반영 포인트
+## 14. 보고서 반영 포인트
 
 - 어떤 변경이 성능에 영향을 주었는지 ablation table로 설명한다.
 - Threshold calibration은 test가 아니라 dev에서만 수행한다.
@@ -232,4 +260,4 @@ python prepare_submit.py
 
 ## 보고서용 요약 문단
 
-실험은 baseline 신뢰성 확인에서 시작해 prompt screening, full training, bidirectional dev prediction, threshold calibration, error analysis, final test prediction 순서로 진행한다. 각 단계는 `paraphrase_detection.py`의 실행 모드로 분리되어 있으며, `test_predict` 외의 모드는 test set을 사용하지 않는다. Prompt screening은 세 template을 subset + 1 epoch로 비교하고, 가장 좋은 prompt만 full training에 사용한다. Bidirectional inference와 threshold calibration은 같은 checkpoint 위에서 dev set 기준으로 비교한다. 최종 test prediction은 checkpoint, prompt, threshold가 모두 확정된 뒤 한 번만 생성한다.
+실험은 prompt screening, full training, bidirectional dev prediction, threshold calibration, error analysis, final test prediction 순서로 진행한다. 각 단계는 `paraphrase_detection.py`의 실행 모드로 분리되어 있으며, `test_predict` 외의 모드는 test set을 사용하지 않는다. Prompt screening은 세 template을 train 5,000개와 dev 1,000개로 비교하고, 가장 좋은 `direct` prompt만 full training에 사용한다. Full training은 전체 train set, 3 epoch, batch size 4, gradient accumulation 2 조건으로 수행한다. Bidirectional inference와 threshold calibration은 같은 checkpoint 위에서 dev set 기준으로 비교한다. 최종 test prediction은 checkpoint, prompt, threshold가 모두 확정된 뒤 한 번만 생성한다.

@@ -1,99 +1,42 @@
 # PART2 Colab GPU run guide
 
-Use the notebook `PART2_Colab_Run.ipynb` on Google Colab with GPU enabled.
+## Status
 
-This version avoids the previous Drive Git-folder problem:
+`PART2_Colab_Run.ipynb` is kept as a legacy Colab helper. It is not the canonical source for the report numbers.
 
-- source code is cloned fresh into `/content/NLP_Study_PART2_CODE` every runtime
-- long-lived outputs are stored in `/content/drive/MyDrive/NLP_Study_PART2_OUTPUT`
-- prompt screening selects the best prompt automatically
-- threshold calibration writes the selected threshold automatically
-- no Git commands are run inside the Drive output folder
-- any previous `results/paraphrase_experiments.csv` is backed up before a new run starts
+Use the GCP rerun script and protocol for report reproduction:
 
-## How to run
-
-1. Open:
-   <https://colab.research.google.com/github/Y0onSe0/NLP_Study/blob/part2/PART2_Colab_Run.ipynb>
-2. Select `Runtime > Change runtime type > GPU`.
-3. Run cells from top to bottom.
-
-You do not need to edit the notebook for the normal run.
-
-## Output locations
-
-All important files are saved under:
-
-```text
-/content/drive/MyDrive/NLP_Study_PART2_OUTPUT
+```bash
+bash scripts/rerun_part2_report_20260611.sh
 ```
 
-Expected subfolders:
+Canonical documentation:
+
+- `docs/part2/05_report_rerun_protocol_20260611.md`
+- `results/report_summary_20260611.csv`
+- `results/rerun-20260611/paraphrase_experiments.csv`
+
+## Why Colab Is Not Canonical
+
+The original Colab notebook was designed for a longer automatic run and used older defaults such as larger screening subsets and `prompt-full.pt` naming. The final report was verified on the GCP T4 VM with these settings:
+
+- prompt screening: train 5,000 / dev 1,000, 1 epoch
+- full training: full train set, direct prompt, 3 epochs
+- training batch size 4 with gradient accumulation 2
+- max length 128
+- bidirectional inference and threshold calibration on dev only
+- final test prediction after checkpoint, prompt, and threshold were fixed
+
+## If Colab Must Be Used
+
+Treat Colab output as a separate exploratory rerun unless the notebook is manually updated to exactly match `scripts/rerun_part2_report_20260611.sh`.
+
+Required final artifacts should still have the same meaning:
 
 ```text
-checkpoints/
-logs/
-predictions/
-results/
-```
-
-Main final files:
-
-```text
-checkpoints/prompt-full.pt
-predictions/para-test-final.csv
 results/paraphrase_experiments.csv
 results/error_analysis_para.csv
+predictions/para-test-final.csv
 ```
 
-## Core setup cell
-
-The notebook uses this structure:
-
-```bash
-CODE=/content/NLP_Study_PART2_CODE
-OUT=/content/drive/MyDrive/NLP_Study_PART2_OUTPUT
-
-rm -rf "$CODE"
-git clone -b part2 --single-branch https://github.com/Y0onSe0/NLP_Study.git "$CODE"
-mkdir -p "$OUT/checkpoints" "$OUT/predictions" "$OUT/results" "$OUT/logs"
-if [ -f "$OUT/results/paraphrase_experiments.csv" ]; then
-  cp "$OUT/results/paraphrase_experiments.csv" "$OUT/results/paraphrase_experiments.backup_$(date +%Y%m%d_%H%M%S).csv"
-  rm "$OUT/results/paraphrase_experiments.csv"
-fi
-```
-
-This is intentional. The code clone is disposable, while outputs survive Colab disconnects.
-
-## Package install
-
-The notebook installs the Colab-friendly packages directly:
-
-```bash
-pip install -q \
-  transformers==4.46.3 \
-  tokenizers==0.20.0 \
-  einops==0.8.0 \
-  sacrebleu==2.5.1 \
-  tqdm==4.58.0 \
-  scikit-learn \
-  pandas
-```
-
-## Full automated flow
-
-The notebook runs:
-
-1. GPU and Drive setup
-2. fresh `part2` clone into `/content`
-3. package install
-4. smoke test
-5. prompt screening for `baseline`, `direct`, `meaning`
-6. automatic best prompt selection by dev accuracy
-7. full training with the selected prompt
-8. bidirectional dev prediction
-9. automatic threshold calibration
-10. error analysis
-11. final test prediction
-
-Colab can still disconnect because runtime limits are controlled by Google, but checkpoints/logs/results/predictions are written to Drive.
+Do not use Colab-generated numbers in the report unless the command sequence, hyperparameters, checkpoint name, and split usage match the canonical rerun protocol.

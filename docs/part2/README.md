@@ -10,6 +10,8 @@
 - [02_improvement_methodology.md](02_improvement_methodology.md): 성능향상 방법론 설명
 - [03_implementation_guide.md](03_implementation_guide.md): 실제 실행 순서와 구현/검증 방법
 - [04_data_split_audit.md](04_data_split_audit.md): train/dev/test 사용 내역 검증
+- [05_report_rerun_protocol_20260611.md](05_report_rerun_protocol_20260611.md): 보고서 숫자 재현을 위한 GCP rerun 프로토콜
+- [06_report_update_notes_20260611.md](06_report_update_notes_20260611.md): 보고서에 반영할 변경사항 요약
 
 ## 전체 실험 흐름
 
@@ -29,10 +31,12 @@
 
 ## 최종 ablation table 기준
 
-- Baseline
-- Prompt 개선
-- Prompt 개선 + Bidirectional inference
-- Prompt 개선 + Bidirectional inference + Threshold calibration
+- Prompt screening baseline/direct/meaning
+- Full direct
+- Full direct + Bidirectional inference
+- Full direct + Bidirectional inference + Threshold calibration
+
+보고서 표에 바로 사용할 파생 요약 CSV는 `results/report_summary_20260611.csv`이다. Raw 실행 이력은 `results/rerun-20260611/paraphrase_experiments.csv`에 유지한다.
 
 ## 보고서용 요약 문단
 

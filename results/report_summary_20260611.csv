@@ -1,0 +1,8 @@
+section,stage,prompt_template,bidirectional,threshold,train_examples,dev_examples,train_epochs,train_batch_size,train_grad_accum_steps,eval_batch_size,dev_acc,dev_f1,selected_threshold,source_csv,source_row,artifact,notes
+prompt_screening,baseline,baseline,False,0.5,5000,1000,1,4,2,4,0.708,0.6127238774297598,,results/rerun-20260611/paraphrase_experiments.csv,3,predictions/rerun-20260611/para-dev-screen-baseline.csv,screening subset
+prompt_screening,direct,direct,False,0.5,5000,1000,1,4,2,4,0.747,0.7210507456104083,,results/rerun-20260611/paraphrase_experiments.csv,5,predictions/rerun-20260611/para-dev-screen-direct.csv,screening subset
+prompt_screening,meaning,meaning,False,0.5,5000,1000,1,4,2,4,0.676,0.5248598043126305,,results/rerun-20260611/paraphrase_experiments.csv,7,predictions/rerun-20260611/para-dev-screen-meaning.csv,screening subset
+full_training,full_direct,direct,False,0.5,full,full,3,4,2,4,0.8867397165401073,0.880403060036592,,results/rerun-20260611/paraphrase_experiments.csv,9,predictions/rerun-20260611/para-dev-full-direct.csv,raw CSV also contains a duplicate rerun row
+ablation,bidirectional,direct,True,0.5,full,full,3,4,2,8,0.890004699596824,0.8837806526484376,,results/rerun-20260611/paraphrase_experiments.csv,11,predictions/rerun-20260611/para-dev-full-direct-bi.csv,same checkpoint as full_direct
+ablation,threshold_calibration,direct,True,0.56,full,full,3,4,2,8,0.8915629869648025,0.8844011846306611,0.56,results/rerun-20260611/paraphrase_experiments.csv,12,results/rerun-20260611/paraphrase_experiments.csv,threshold selected on dev
+final_output,test_prediction,direct,True,0.56,full,NA,3,4,2,8,,,,results/rerun-20260611/paraphrase_experiments.csv,14,predictions/rerun-20260611/para-test-final.csv,test labels unavailable

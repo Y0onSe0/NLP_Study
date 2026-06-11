@@ -51,13 +51,6 @@ run_step full-direct-train "${PYTHON}" paraphrase_detection.py --use_gpu --mode 
   --para_dev_out "predictions/${TAG}/para-dev-full-direct.csv" \
   --experiment_log "${EXPERIMENT_LOG}"
 
-run_step full-direct-dev "${PYTHON}" paraphrase_detection.py --use_gpu --mode dev_predict \
-  --batch_size 8 --max_length 128 --prompt_template direct \
-  --filepath "${FULL_CKPT}" \
-  --output_tag "${TAG}-full-direct" \
-  --para_dev_out "predictions/${TAG}/para-dev-full-direct.csv" \
-  --experiment_log "${EXPERIMENT_LOG}"
-
 run_step full-direct-bi-dev "${PYTHON}" paraphrase_detection.py --use_gpu --mode dev_predict \
   --batch_size 8 --max_length 128 --prompt_template direct --bidirectional --threshold 0.5 \
   --filepath "${FULL_CKPT}" \
@@ -87,9 +80,12 @@ run_step final-test "${PYTHON}" paraphrase_detection.py --use_gpu --mode test_pr
   --para_test_out "predictions/${TAG}/para-test-final.csv" \
   --experiment_log "${EXPERIMENT_LOG}"
 
+run_step report-summary "${PYTHON}" scripts/build_report_summary_20260611.py
+
 {
   echo "===== verification $(date -Is) ====="
   tail -n 20 "${EXPERIMENT_LOG}"
+  cat "results/report_summary_20260611.csv"
   wc -l "predictions/${TAG}/para-test-final.csv"
   wc -l "results/${TAG}/error_analysis_para.csv"
 } | tee "logs/${TAG}/verification.log"

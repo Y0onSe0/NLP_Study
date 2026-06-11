@@ -26,3 +26,11 @@ PART-II Paraphrase Detection 개발 과정에서 prompt 선택, checkpoint 선�
 현재 확인된 문제는 데이터 파일 선택 오류가 아니라 split 이름 출력 오류다. 따라서 기존 full training 결과를 폐기하고 다시 학습할 필요는 없다. 다만 만약 별도 실행 기록에서 `data/quora-test-student.csv`를 사용한 뒤 prompt, checkpoint, threshold를 다시 바꾼 흔적이 발견되면 그 경우에는 test leakage로 보고 train/dev 기준으로 다시 선택해야 한다.
 
 현재 `results/paraphrase_experiments.csv` 기준으로 test set을 읽은 기록은 `full-direct-final,test_predict` 한 행이며, 이 행에는 dev accuracy/F1이나 selected threshold가 기록되어 있지 않다. 이는 최종 prediction 생성 용도였음을 의미한다.
+
+## 이후 재실행 기록
+
+불안 요소를 줄이기 위해 2026-06-11에 GCP T4 VM에서 보고서용 PART-II 실행을 다시 수행했다. 해당 rerun도 prompt 선택, checkpoint 선택, bidirectional inference, threshold calibration, error analysis는 train/dev만 사용했고, test set은 `test_predict`에서 최종 prediction 생성에만 사용했다.
+
+- Raw rerun CSV: `results/rerun-20260611/paraphrase_experiments.csv`
+- Report-facing summary CSV: `results/report_summary_20260611.csv`
+- Final test prediction: `predictions/rerun-20260611/para-test-final.csv`
