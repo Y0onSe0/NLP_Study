@@ -112,8 +112,8 @@ def main():
       train_batch_size="4",
       train_grad_accum_steps="2",
       eval_batch_size="4",
-      artifact=f"predictions/rerun-20260611/para-dev-screen-{prompt}.csv",
-      notes="screening subset",
+      artifact=str(RAW_CSV),
+      notes="screening subset; metric row is the retained artifact",
     ))
 
   line_no, row = find_one(
@@ -142,7 +142,7 @@ def main():
     train_batch_size="4",
     train_grad_accum_steps="2",
     eval_batch_size="4",
-    artifact="predictions/rerun-20260611/para-dev-full-direct.csv",
+    artifact=str(RAW_CSV),
     notes=full_direct_note,
   ))
 
@@ -158,8 +158,8 @@ def main():
     train_batch_size="4",
     train_grad_accum_steps="2",
     eval_batch_size="8",
-    artifact="predictions/rerun-20260611/para-dev-full-direct-bi.csv",
-    notes="same checkpoint as full_direct",
+    artifact=str(RAW_CSV),
+    notes="same checkpoint as full_direct; metric row is retained",
   ))
 
   line_no, row = find_one(rows, output_tag="rerun-20260611-full-direct-bi-calib", mode="calibrate_dev")
