@@ -4,6 +4,8 @@
 *.pt
 *.pkl
 *.log
+*smoke*.csv
 .DS_Store
 .idea/
+nlp2026-final-outputs/
 out/
