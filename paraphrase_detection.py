@@ -153,9 +153,9 @@ def load_checkpoint(filepath):
 
 def write_paraphrase_predictions(output_path, sent_ids, predictions):
   with open(output_path, "w+") as f:
-    f.write(f"id \t Predicted_Is_Paraphrase \n")
+    f.write("id,Predicted_Is_Paraphrase\n")
     for sent_id, pred in zip(sent_ids, predictions):
-      f.write(f"{sent_id}, {int(pred)} \n")
+      f.write(f"{sent_id},{int(pred)}\n")
 
 
 def token_overlap(sentence1, sentence2):
